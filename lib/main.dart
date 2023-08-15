@@ -20,7 +20,12 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
   ).then((_) {
-    runApp(const EntryApp());
+    /*  WidgetsBinding.instance.addPostFrameCallback((_) {
+      runApp(const EntryApp());
+    }); */
+    runApp(
+      const EntryApp(),
+    );
   });
 }
 

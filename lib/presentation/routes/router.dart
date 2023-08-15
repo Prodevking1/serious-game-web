@@ -6,6 +6,7 @@ import 'package:supabase/supabase.dart';
 
 import '../controllers/auth_controller.dart';
 import '../screens/home_screen.dart';
+import '../screens/part_1.dart';
 
 class BaseBinding extends Bindings {
   @override
@@ -22,6 +23,7 @@ class AppRouter {
   static const registerPage = '/register';
   static const homePage = '/home';
   static const profilePage = '/profile';
+  static const level1 = '/level1';
 
   static List<GetPage<dynamic>> getPage() {
     return [
@@ -38,6 +40,11 @@ class AppRouter {
       GetPage(
         name: homePage,
         page: () => const HomeScreen(),
+        binding: BaseBinding(),
+      ),
+      GetPage(
+        name: level1,
+        page: () => Level1Screen(),
         binding: BaseBinding(),
       ),
     ];

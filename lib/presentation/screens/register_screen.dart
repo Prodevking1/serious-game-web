@@ -38,13 +38,13 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: Get.width / 3,
-                top: Get.height / 3.8,
+                left: Get.width / 3.3,
+                top: 10,
                 child: Align(
                   alignment: Alignment.center,
                   child: CustomCard(
-                    width: Get.width * 0.3,
-                    padding: const EdgeInsets.all(50),
+                    width: Get.width * 0.4,
+                    padding: const EdgeInsets.all(20),
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,7 +55,7 @@ class RegisterScreen extends StatelessWidget {
                               child: CustomInput(
                                 hintText: 'Ton nom d\'utilisateur',
                                 backgroundColor:
-                                    AppColors.tertiaryColor.withOpacity(0.8),
+                                    AppColors.primaryColor.withOpacity(0.2),
                                 borderRadius: 15,
                                 controller: userNameController,
                               ),
@@ -67,13 +67,13 @@ class RegisterScreen extends StatelessWidget {
                               child: CustomInput(
                                 hintText: 'Ton mot de passe',
                                 backgroundColor:
-                                    AppColors.tertiaryColor.withOpacity(0.8),
+                                    AppColors.primaryColor.withOpacity(0.2),
                                 borderRadius: 15,
                                 controller: passwordController,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 5),
                           Text(
                             'Quel est ton genre?',
                             style: AppTextStyles.body.copyWith(
@@ -85,33 +85,38 @@ class RegisterScreen extends StatelessWidget {
                             builder: (context, value, child) {
                               return Column(
                                 children: [
-                                  RadioListTile(
-                                    title: const Text(
-                                      'M',
+                                  SizedBox(
+                                    height: 30,
+                                    child: RadioListTile(
+                                      title: const Text(
+                                        'M',
+                                      ),
+                                      value: 'M',
+                                      groupValue: value,
+                                      onChanged: (val) {
+                                        genderValue.value = val as String;
+                                      },
+                                      activeColor: AppColors.primaryColor,
                                     ),
-                                    value: 'M',
-                                    groupValue: value,
-                                    onChanged: (val) {
-                                      genderValue.value = val as String;
-                                    },
-                                    activeColor: AppColors.primaryColor,
                                   ),
-                                  RadioListTile(
-                                    title: const Text(
-                                      'F',
+                                  SizedBox(
+                                    height: 50,
+                                    child: RadioListTile(
+                                      title: const Text(
+                                        'F',
+                                      ),
+                                      value: 'F',
+                                      groupValue: value,
+                                      onChanged: (val) {
+                                        genderValue.value = val as String;
+                                      },
+                                      activeColor: AppColors.primaryColor,
                                     ),
-                                    value: 'F',
-                                    groupValue: value,
-                                    onChanged: (val) {
-                                      genderValue.value = val as String;
-                                    },
-                                    activeColor: AppColors.primaryColor,
-                                  ),
+                                  )
                                 ],
                               );
                             },
                           ),
-                          const SizedBox(height: 10),
                           Row(
                             children: [
                               Expanded(
@@ -122,7 +127,7 @@ class RegisterScreen extends StatelessWidget {
                                   },
                                 ),
                               ),
-                              const SizedBox(width: 10),
+                              const SizedBox(width: 5),
                               Expanded(
                                 child: CustomGameButton(
                                   text: "Connexion",
@@ -140,10 +145,10 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: Get.width / 3,
-                top: Get.height / 1.2,
+                left: Get.width / 3.3,
+                top: Get.height / 1.25,
                 child: CustomGameButton(
-                  width: Get.width * 0.3,
+                  width: Get.width * 0.4,
                   text: "Continuer sans compte",
                   onPressed: () {
                     Get.toNamed(AppRouter.homePage);
