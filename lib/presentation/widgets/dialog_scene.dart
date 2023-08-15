@@ -38,7 +38,7 @@ class _DialogSceneState extends State<DialogScene> {
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Opacity(
-                  opacity: currentSpeaker == 'Aissa' ? 1 : 0.4,
+                  opacity: currentSpeaker == 'Aissa' ? 1 : 0.3,
                   child: Container(
                     height: Get.height / 1,
                     width: Get.width / 4,
@@ -136,7 +136,7 @@ class _DialogSceneState extends State<DialogScene> {
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Opacity(
-                  opacity: currentSpeaker != 'Aissa' ? 1 : 0.4,
+                  opacity: currentSpeaker != 'Aissa' ? 1 : 0.3,
                   child: Container(
                     height: Get.height / 1,
                     width: Get.width / 4,
