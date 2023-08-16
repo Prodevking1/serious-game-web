@@ -23,7 +23,7 @@ class AppTextStyles {
           cursor: '',
           text,
           textStyle: subtitle,
-          speed: const Duration(milliseconds: 100),
+          speed: const Duration(milliseconds: 50),
         ),
       ],
     );
@@ -34,8 +34,12 @@ class AppMedia {
   static const String introSound = 'assets/sounds/intro.mp3';
   static const String introBackgroundImage = 'assets/images/intro-bg.png';
   static const String mapImage = 'assets/images/3d-map.jpeg';
-  static const String aissa = 'assets/images/aissa.png';
+  static const String mounira = 'assets/images/mounira.png';
   static const String teacher = 'assets/images/teacher.png';
+  static const String hamidou = 'assets/images/hamidou.png';
+  static const String safi = 'assets/images/safi.png';
+  static const String djamila = 'assets/images/safi.png';
+  static const String chief = 'assets/images/chief.png';
 }
 
 class AppColors {

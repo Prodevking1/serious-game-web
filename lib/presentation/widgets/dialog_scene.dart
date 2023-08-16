@@ -8,8 +8,11 @@ import '../../domain/entities/line.dart';
 import '../../utils/constants.dart';
 
 class DialogScene extends StatefulWidget {
-  final Dialogue dialogue;
-  const DialogScene({super.key, required this.dialogue});
+  final List<Dialogue> dialogue;
+  final Function onDialogueEnd;
+
+  const DialogScene(
+      {super.key, required this.dialogue, required this.onDialogueEnd});
 
   @override
   _DialogSceneState createState() => _DialogSceneState();
@@ -17,15 +20,40 @@ class DialogScene extends StatefulWidget {
 
 class _DialogSceneState extends State<DialogScene> {
   int _currentLineIndex = 0;
+  int _currentDialogueIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    Dialogue dialogue = widget.dialogue;
-    List<Line> lines = dialogue.lines;
-    List<String> dialoglines = lines.map((e) => e.text).toList();
+    Dialogue currentDialogue =
+        widget.dialogue[_currentDialogueIndex % widget.dialogue.length];
+    List<Line> lines = currentDialogue.lines;
+    Line currentLine = lines[_currentLineIndex];
 
     String currentSpeaker =
         lines[_currentLineIndex % lines.length].speaker.name;
+
+    void nextLine() {
+      if (_currentDialogueIndex == widget.dialogue.length - 1 &&
+          _currentLineIndex == lines.length - 1) {
+        widget.onDialogueEnd.call();
+      }
+      if (_currentLineIndex == lines.length - 1) {
+        setState(() {
+          _currentLineIndex = 0;
+          _currentDialogueIndex++;
+        });
+      } else {
+        setState(() {
+          _currentLineIndex++;
+        });
+      }
+    }
+
+    void _previousLine() {
+      setState(() {
+        _currentLineIndex--;
+      });
+    }
 
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
@@ -34,25 +62,25 @@ class _DialogSceneState extends State<DialogScene> {
           //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
           children: [
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Opacity(
-                  opacity: currentSpeaker == 'Aissa' ? 1 : 0.3,
-                  child: Container(
-                    height: Get.height / 1,
-                    width: Get.width / 4,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(30),
-                          bottomRight: Radius.circular(30)),
-                      color: Colors.white,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          dialogue.lines[0].speaker.imagePath,
-                        ),
-                      ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Opacity(
+                opacity: currentSpeaker == 'Mounira' ? 1 : 0.3,
+                child: Container(
+                  height: Get.height / 1,
+                  width: Get.width / 4,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        bottomRight: Radius.circular(30)),
+                    color: Colors.white,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage(currentDialogue.lines
+                          .where((element) => element.speaker.name == 'Mounira')
+                          .first
+                          .speaker
+                          .imagePath),
                     ),
                   ),
                 ),
@@ -79,9 +107,7 @@ class _DialogSceneState extends State<DialogScene> {
                   color: AppColors.secondaryColor,
                   width: Get.width / 4,
                   onPressed: () {
-                    setState(() {
-                      _currentLineIndex++;
-                    });
+                    nextLine();
                   },
                 ),
               ),
@@ -102,18 +128,10 @@ class _DialogSceneState extends State<DialogScene> {
                     ),
                     Align(
                       alignment: Alignment.topCenter,
-                      child: Expanded(
-                        flex: 5,
-                        child: Text(
-                          widget
-                              .dialogue
-                              .lines[_currentLineIndex %
-                                  widget.dialogue.lines.length]
-                              .speaker
-                              .name,
-                          style: AppTextStyles.title.copyWith(
-                            color: AppColors.primaryColor,
-                          ),
+                      child: Text(
+                        currentLine.speaker.name,
+                        style: AppTextStyles.title.copyWith(
+                          color: AppColors.primaryColor,
                         ),
                       ),
                     ),
@@ -123,8 +141,7 @@ class _DialogSceneState extends State<DialogScene> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Text(
-                        lines[_currentLineIndex % widget.dialogue.lines.length]
-                            .text,
+                        currentLine.text,
                         style: AppTextStyles.body,
                       ),
                     ),
@@ -132,25 +149,25 @@ class _DialogSceneState extends State<DialogScene> {
                 ),
               ),
             ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Opacity(
-                  opacity: currentSpeaker != 'Aissa' ? 1 : 0.3,
-                  child: Container(
-                    height: Get.height / 1,
-                    width: Get.width / 4,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          bottomLeft: Radius.circular(30)),
-                      color: Colors.white,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          dialogue.lines[1].speaker.imagePath,
-                        ),
-                      ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Opacity(
+                opacity: currentSpeaker != 'Mounira' ? 1 : 0.3,
+                child: Container(
+                  height: Get.height / 1,
+                  width: Get.width / 4,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        bottomLeft: Radius.circular(30)),
+                    color: Colors.white,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: AssetImage(currentDialogue.lines
+                          .where((element) => element.speaker.name != 'Mounira')
+                          .first
+                          .speaker
+                          .imagePath),
                     ),
                   ),
                 ),

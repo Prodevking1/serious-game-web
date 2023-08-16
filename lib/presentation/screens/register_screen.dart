@@ -51,26 +51,22 @@ class RegisterScreen extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10),
-                            child: Expanded(
-                              child: CustomInput(
-                                hintText: 'Ton nom d\'utilisateur',
-                                backgroundColor:
-                                    AppColors.primaryColor.withOpacity(0.2),
-                                borderRadius: 15,
-                                controller: userNameController,
-                              ),
+                            child: CustomInput(
+                              hintText: 'Ton nom d\'utilisateur',
+                              backgroundColor:
+                                  AppColors.primaryColor.withOpacity(0.2),
+                              borderRadius: 15,
+                              controller: userNameController,
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10),
-                            child: Expanded(
-                              child: CustomInput(
-                                hintText: 'Ton mot de passe',
-                                backgroundColor:
-                                    AppColors.primaryColor.withOpacity(0.2),
-                                borderRadius: 15,
-                                controller: passwordController,
-                              ),
+                            child: CustomInput(
+                              hintText: 'Ton mot de passe',
+                              backgroundColor:
+                                  AppColors.primaryColor.withOpacity(0.2),
+                              borderRadius: 15,
+                              controller: passwordController,
                             ),
                           ),
                           const SizedBox(height: 5),

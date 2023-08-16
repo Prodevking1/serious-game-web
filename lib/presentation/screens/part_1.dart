@@ -1,9 +1,11 @@
 import 'package:flame_game/domain/entities/line.dart';
 import 'package:flame_game/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../domain/entities/dialog.dart';
 import '../../domain/entities/person.dart';
+import '../routes/router.dart';
 import '../widgets/dialog_scene.dart';
 
 class Level1Screen extends StatelessWidget {
@@ -11,13 +13,21 @@ class Level1Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Person aissa = Person(name: 'Aissa', imagePath: AppMedia.aissa);
+    final Person mounira = Person(name: 'Mounira', imagePath: AppMedia.mounira);
     final Person teacher =
         Person(name: 'Enseignante', imagePath: AppMedia.teacher);
 
-    Dialogue dialogue = Dialogue(description: 'Le grand depart.', lines: [
+    final Person farida = Person(name: 'Farida', imagePath: AppMedia.safi);
+    final Person djamila = Person(name: 'Djamila', imagePath: AppMedia.djamila);
+
+    final Person hamidou = Person(name: 'Hamidou', imagePath: AppMedia.hamidou);
+    final Person chief =
+        Person(name: 'Chef du village', imagePath: AppMedia.chief);
+
+    Dialogue dialogueWithTeacher =
+        Dialogue(description: 'Le grand depart.', lines: [
       Line(
-        speaker: aissa,
+        speaker: mounira,
         text:
             "Je suis prête à entreprendre ce voyage pour en apprendre plus sur notre pays.",
       ),
@@ -25,126 +35,70 @@ class Level1Screen extends StatelessWidget {
           speaker: teacher,
           text:
               "Tu verras les réalités auxquelles sont confrontés de nombreux enfants. Certaines filles n'ont pas la chance d'aller à l'école."),
+      Line(
+          speaker: mounira,
+          text:
+              "C'est injuste ! Chaque enfant devrait pouvoir étudier et réaliser son potentiel."),
     ]);
-    return /* Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: SafeArea(
-        child: Stack(
-          //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-          children: [
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  height: Get.height / 1,
-                  width: Get.width / 4,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        bottomRight: Radius.circular(30)),
-                    color: Colors.white,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(
-                        AppMedia.aissa,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+    Dialogue dialogueWithHamidou =
+        Dialogue(description: "Le grand depart", lines: [
+      Line(
+          speaker: hamidou,
+          text:
+              "Dans mon village, seuls les garçons vont à l'école. Mes parents disent que ce n'est pas la peine de scolariser une fille."),
+      Line(
+          speaker: mounira,
+          text:
+              "Mais c'est si important que les filles soient instruites ! L'égalité des sexes passe par l'éducation. J'aimerais convaincre tes parents."),
+    ]);
 
-            /* Container(
-              // Your background image or map image goes here
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(
-                    AppMedia.mapImage,
-                  ),
-                ),
-              ),
-            ), */
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 20, right: 35),
-                child: CustomGameButton(
-                  text: 'Suivant',
-                  color: AppColors.secondaryColor,
-                  width: Get.width / 4,
-                  onPressed: () {
-                    setState(() {
-                      _currentLineIndex++;
-                    });
-                  },
-                ),
-              ),
-            ),
-            //const SizedBox(height: 30),
-            Positioned(
-              top: Get.height * 0.1,
-              left: Get.width / 3.18,
-              child: CustomCard(
-                /* width: Get.width,
-                height: Get.height, */
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        _currentLineIndex % 2 == 0 ? 'Aïssa' : nonPlayer1.name!,
-                        style: AppTextStyles.title.copyWith(
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: Get.height / 10,
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Text(
-                        dialogue1.lines[_currentLineIndex%dialogue1.lines.length],
-                        style: AppTextStyles.body,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  height: Get.height / 1,
-                  width: Get.width / 4,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        bottomLeft: Radius.circular(30)),
-                    color: AppColors.secondaryColor,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(
-                        AppMedia.teacher,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ); */
+    Dialogue dialogueWithFarida =
+        Dialogue(description: "Le grand depart", lines: [
+      Line(
+          speaker: farida,
+          text:
+              "Moi j'ai dû arrêter l'école l'année dernière pour aider aux tâches ménagères et m'occuper de mes frères et sœurs."),
+      Line(
+          speaker: mounira,
+          text:
+              "Farida, tu mérites de poursuivre tes études et de décider de ton avenir ! Je vais me battre pour que tu aies cette chance."),
+    ]);
 
-        DialogScene(dialogue: dialogue);
+    Dialogue dialogueWithDjamila =
+        Dialogue(description: "Le grand depart", lines: [
+      Line(
+          speaker: djamila,
+          text:
+              "Je veux être pilote d'avion pour voyager partout dans le monde. Mais on dit que c'est un métier d'homme."),
+      Line(
+          speaker: mounira,
+          text:
+              "Les filles peuvent faire ce qu'elles veulent comme les garçons. Je vais te montrer que tu peux réaliser ton rêve."),
+    ]);
+
+    Dialogue dialogueWithChief =
+        Dialogue(description: "Le grand depart", lines: [
+      Line(
+          speaker: chief,
+          text:
+              "Le chemin vers le changement est long. Mais tu as la volonté d'agir pour l'égalité et l'éducation de tous."),
+      Line(
+          speaker: mounira,
+          text:
+              "Oui, ce voyage sera l'occasion d'en apprendre plus et de sensibiliser sur ces enjeux. Le changement viendra !"),
+    ]);
+
+    return DialogScene(
+        dialogue: [
+          dialogueWithTeacher,
+          dialogueWithHamidou,
+          dialogueWithFarida,
+          dialogueWithDjamila,
+          dialogueWithChief
+        ],
+        onDialogueEnd: () {
+          Get.offAllNamed(AppRouter.homePage);
+        });
   }
 }

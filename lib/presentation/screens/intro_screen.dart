@@ -11,7 +11,6 @@ class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _IntroScreenState createState() => _IntroScreenState();
 }
 
@@ -19,7 +18,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
-    //GameAudioPlayer().playAudio(AppMedia.introSound, isLooping: true);
+    GameAudioPlayer().playAudio(AppMedia.introSound, isLooping: true);
   }
 
   @override
@@ -31,10 +30,12 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: GestureDetector(
-          onTap: () {},
-          child: Stack(
+        body: SafeArea(
+      child: GestureDetector(
+        onTap: () {},
+        child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+          return Stack(
             children: [
               Container(
                 decoration: const BoxDecoration(
@@ -54,7 +55,8 @@ class _IntroScreenState extends State<IntroScreen> {
                   height: Get.height * 0.3,
                   padding: const EdgeInsets.all(10),
                   child: AppTextStyles.typewriterStyle(
-                      "Salut ! \n Moi c'est Aissa. Commençons l'aventure 😃"),
+                    "Salut ! \n Moi c'est Aissa. Commençons l'aventure 😃",
+                  ),
                 ),
               ),
               Positioned(
@@ -69,9 +71,9 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
               ),
             ],
-          ),
-        ),
+          );
+        }),
       ),
-    );
+    ));
   }
 }
