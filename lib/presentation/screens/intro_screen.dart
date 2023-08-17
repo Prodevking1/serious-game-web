@@ -34,7 +34,7 @@ class _IntroScreenState extends State<IntroScreen> {
       child: GestureDetector(
         onTap: () {},
         child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
+            builder: (BuildContext context, BoxConstraints constraints){
           return Stack(
             children: [
               Container(
