@@ -18,7 +18,7 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
-    GameAudioPlayer().playAudio(AppMedia.introSound, isLooping: true);
+    //GameAudioPlayer().playAudio(AppMedia.introSound, isLooping: true);
   }
 
   @override
@@ -34,7 +34,7 @@ class _IntroScreenState extends State<IntroScreen> {
       child: GestureDetector(
         onTap: () {},
         child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints){
+            builder: (BuildContext context, BoxConstraints constraints) {
           return Stack(
             children: [
               Container(
@@ -66,7 +66,7 @@ class _IntroScreenState extends State<IntroScreen> {
                   width: Get.width * 0.38,
                   text: 'Commencer le jeu',
                   onPressed: () {
-                    Get.toNamed(AppRouter.registerPage);
+                    Get.offAllNamed(AppRouter.registerPage);
                   },
                 ),
               ),

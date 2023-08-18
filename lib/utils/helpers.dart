@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:just_audio/just_audio.dart';
 
 class GameAudioPlayer {
@@ -17,3 +18,4 @@ class GameAudioPlayer {
     player.pause();
   }
 }
+

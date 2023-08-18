@@ -20,15 +20,15 @@ enum Status {
 }
 
 class GameState {
-  int miniGameId;
+  int PartyId;
 
-  GameState({required this.miniGameId});
+  GameState({required this.PartyId});
 }
 ''' > game_state.dart
 
 # Créer le fichier mini_game.dart
 echo '''
-class MiniGame {
+class Party {
   int id;
   String name;
   String description;
@@ -38,7 +38,7 @@ class MiniGame {
   Duration duration;
   int finalScore;
 
-  MiniGame({
+  Party({
     required this.id,
     required this.name,
     required this.description,

@@ -1,3 +1,5 @@
+import 'package:flame_game/presentation/controllers/evolution_controller.dart';
+import 'package:flame_game/presentation/controllers/region_controller.dart';
 import 'package:flame_game/presentation/screens/intro_screen.dart';
 import 'package:flame_game/presentation/screens/register_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -14,6 +16,12 @@ class BaseBinding extends Bindings {
     Get.lazyPut(() => SupabaseClient(
         dotenv.env['SUPABASE_URL']!, dotenv.env['SUPABASE_KEY']!));
     Get.lazyPut(() => AuthController());
+    Get.lazyPut(
+      () => EvolutionController(),
+    );
+    Get.lazyPut(
+      () => RegionController(),
+    );
   }
 }
 
@@ -39,7 +47,7 @@ class AppRouter {
       ),
       GetPage(
         name: homePage,
-        page: () => const HomeScreen(),
+        page: () => HomeScreen(),
         binding: BaseBinding(),
       ),
       GetPage(

@@ -5,11 +5,19 @@ import 'package:get/get.dart';
 
 import '../../domain/entities/dialog.dart';
 import '../../domain/entities/person.dart';
+import '../../domain/entities/region.dart';
+import '../controllers/evolution_controller.dart';
+import '../controllers/party_controller.dart';
 import '../routes/router.dart';
 import '../widgets/dialog_scene.dart';
 
 class Level1Screen extends StatelessWidget {
-  const Level1Screen({super.key});
+  final Region? region;
+  Level1Screen({super.key, this.region});
+
+  EvolutionController evolutionController = Get.find();
+
+  PartyController partyController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +106,11 @@ class Level1Screen extends StatelessWidget {
           dialogueWithChief
         ],
         onDialogueEnd: () {
+          partyController.incrementPartyScore(
+            region: region!,
+            score: PartyReward.basicRewardPoints,
+          );
+          evolutionController.incrementLevel(1);
           Get.offAllNamed(AppRouter.homePage);
         });
   }

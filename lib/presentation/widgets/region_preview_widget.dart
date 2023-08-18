@@ -27,7 +27,7 @@ class RegionPreviewWidget extends StatelessWidget {
             width: 35,
             borderRadius: 100,
             backgroundColor: AppColors.tertiaryColor,
-            child: region?.status != Status.notStarted
+            child: region?.party.status != Status.notStarted
                 ? const Center(
                     child: Icon(
                     Icons.check_rounded,

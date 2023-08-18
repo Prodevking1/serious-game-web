@@ -47,3 +47,9 @@ class AppColors {
   static const Color secondaryColor = Color(0xff026B52);
   static const Color tertiaryColor = Color(0xffffd700);
 }
+
+class PartyReward {
+  static const int basicRewardPoints = 100;
+  
+  static const int bonusRewardPoints = 50;
+}

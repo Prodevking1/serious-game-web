@@ -6,7 +6,7 @@ import 'package:supabase/supabase.dart';
 
 import '../routes/router.dart';
 
-class AuthController extends GetxController {
+class AuthController extends GetxService {
   final AuthService _authService = AuthService();
 
   Future signUp(

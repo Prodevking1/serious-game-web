@@ -7,6 +7,6 @@ enum Status {
 }
 
 class GameState {
-  int miniGameId;
-  GameState({required this.miniGameId});
+  int PartyId;
+  GameState({required this.PartyId});
 }
