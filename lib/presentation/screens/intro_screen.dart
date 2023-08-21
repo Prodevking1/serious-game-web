@@ -66,7 +66,7 @@ class _IntroScreenState extends State<IntroScreen> {
                   width: Get.width * 0.38,
                   text: 'Commencer le jeu',
                   onPressed: () {
-                    Get.offAllNamed(AppRouter.registerPage);
+                    Get.offAllNamed(AppRoutes.registerPage);
                   },
                 ),
               ),

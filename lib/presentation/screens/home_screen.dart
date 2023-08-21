@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame_game/presentation/controllers/region_controller.dart';
+import 'package:flame_game/presentation/routes/router.dart';
 import 'package:flame_game/presentation/widgets/card_widget.dart';
 import 'package:flame_game/presentation/widgets/region_preview_widget.dart';
 import 'package:flutter/material.dart';
@@ -55,47 +56,83 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20),
           child: Align(
             alignment: Alignment.topCenter,
-            child: Obx(() => CustomCard(
-                  backgroundColor: Colors.yellow,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  width: Get.width * 0.35,
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        children: [
-                          const Text(
-                            'Score: ',
-                            style: AppTextStyles.body,
-                          ),
-                          Text(EvolutionController.totalScore.toString(),
-                              style: AppTextStyles.subtitle),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Level: ',
-                            style: AppTextStyles.body,
-                          ),
-                          Text(EvolutionController.level.toString(),
-                              style: AppTextStyles.subtitle),
-                        ],
-                      ),
-                    ],
-                  ),
-                )),
-          ),
-        ),
-        for (Region region in regionController.regions)
-          Positioned(
-            left: Get.width * (Random().nextInt(100) * 0.01),
-            bottom: Get.height * (Random().nextInt(50) * 0.01),
-            child: RegionPreviewWidget(
-              region: region,
+            child: Obx(
+              () => CustomCard(
+                backgroundColor: Colors.yellow,
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                width: Get.width * 0.35,
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          'Score: ',
+                          style: AppTextStyles.body,
+                        ),
+                        Text(EvolutionController.totalScore.toString(),
+                            style: AppTextStyles.subtitle),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Level: ',
+                          style: AppTextStyles.body,
+                        ),
+                        Text(EvolutionController.level.toString(),
+                            style: AppTextStyles.subtitle),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
+        ),
+        Stack(
+          children: [
+            ...regionController.regions.asMap().entries.map(
+              (entry) {
+                final index = entry.key;
+                final region = entry.value;
+                const separationFactor =
+                    1.5; // Ajustez cette valeur comme vous le souhaitez
+                final totalHeight = Get.height;
+                final regionHeight = totalHeight / 5;
+
+                final availableHeight = totalHeight -
+                    (regionHeight *
+                        regionController.regions.length *
+                        separationFactor);
+
+                final topOffset = availableHeight / 2 +
+                    index * regionHeight * separationFactor;
+
+                final random = Random();
+                final x = random.nextInt(100).toDouble();
+
+                return Positioned(
+                  left: x,
+                  top: topOffset,
+                  child: GestureDetector(
+                    onTap: () {
+                      /*  evolutionController.addRegion(region);
+                regionController.removeRegion(region); */
+                    },
+                    child: RegionPreviewWidget(
+                      region: region,
+                      onTap: () {
+                        Get.toNamed(AppRoutes.level1, arguments: region);
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ],
     );
   }

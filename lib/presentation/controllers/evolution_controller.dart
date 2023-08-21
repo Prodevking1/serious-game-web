@@ -12,41 +12,51 @@ class EvolutionController extends GetxController {
   static int get level => _level.value;
 
   @override
-  void onInit() {
-    print('init');
-    // fetchSavedScore();
+  void onInit() async {
+    await fetchSavedScore();
+    await fetchCurrentLevel();
     super.onInit();
   }
 
-  incrementScore(int score) {
+  incrementScore(int score) async {
     _totalScore.value += score;
-    saveScore();
+    await saveScore();
   }
 
-  incrementLevel(int level) {
+  incrementLevel(int level) async {
     _level.value += level;
-    saveLevel();
+    await saveLevel();
   }
 
-  fetchSavedScore() {
-    final res = localStorage.getData("score");
+  fetchSavedScore() async {
+    final res = await localStorage.getData("score");
+    print(res);
     if (res != null) {
       _totalScore.value = res;
     }
   }
 
-  fetchCurrentLevel() {
-    final res = localStorage.getData("level");
+  fetchCurrentLevel() async {
+    final res = await localStorage.getData("level");
+    print(res);
     if (res != null) {
       _level.value = res;
     }
   }
 
-  saveScore() {
-    localStorage.saveData("score", _totalScore.value);
+  Future<void> saveScore() async {
+    try {
+      await localStorage.saveData("score", _totalScore.value);
+    } catch (e) {
+      print(e);
+    }
   }
 
-  saveLevel() {
-    LocalStorage().saveData("level", _level.value);
+  Future<void> saveLevel() async {
+    try {
+      await localStorage.saveData("level", _level.value);
+    } catch (e) {
+      print(e);
+    }
   }
 }

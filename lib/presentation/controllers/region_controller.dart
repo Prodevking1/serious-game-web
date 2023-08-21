@@ -10,15 +10,15 @@ class RegionController extends GetxController {
   RxList<Region> regions = <Region>[].obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
 
     //generateRegions();
-    fetchAllRegions();
+    await fetchAllRegions();
   }
 
-  fetchAllRegions() {
-    regions.value = localStorage.getRegions() ?? [];
+  fetchAllRegions() async {
+    regions.value = await localStorage.getRegions();
   }
 
   generateRegions() {

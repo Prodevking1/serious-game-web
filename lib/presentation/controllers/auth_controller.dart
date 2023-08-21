@@ -21,7 +21,7 @@ class AuthController extends GetxService {
         colorText: Colors.white,
         backgroundColor: AppColors.secondaryColor,
       );
-      Get.toNamed(AppRouter.homePage);
+      Get.toNamed(AppRoutes.homePage);
     } on AuthException catch (e) {
       if (e.statusCode == "400") {
         Get.snackbar(
@@ -50,7 +50,7 @@ class AuthController extends GetxService {
         colorText: Colors.white,
         backgroundColor: AppColors.secondaryColor,
       );
-      Get.toNamed(AppRouter.homePage);
+      Get.toNamed(AppRoutes.homePage);
     } on AuthException catch (e) {
       if (e.statusCode == "400") {
         Get.snackbar(
@@ -72,6 +72,6 @@ class AuthController extends GetxService {
 
   Future signOut() async {
     await _authService.signOut();
-    Get.offAllNamed(AppRouter.introPage);
+    Get.offAllNamed(AppRoutes.introPage);
   }
 }

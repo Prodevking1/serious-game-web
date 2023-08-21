@@ -12,12 +12,14 @@ import '../routes/router.dart';
 import '../widgets/dialog_scene.dart';
 
 class Level1Screen extends StatelessWidget {
-  final Region? region;
-  Level1Screen({super.key, this.region});
+  Level1Screen({
+    super.key,
+  });
 
   EvolutionController evolutionController = Get.find();
 
   PartyController partyController = Get.find();
+  final Region? region = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +112,9 @@ class Level1Screen extends StatelessWidget {
             region: region!,
             score: PartyReward.basicRewardPoints,
           );
+          evolutionController.incrementScore(PartyReward.basicRewardPoints);
           evolutionController.incrementLevel(1);
-          Get.offAllNamed(AppRouter.homePage);
+          Get.offAllNamed(AppRoutes.homePage);
         });
   }
 }

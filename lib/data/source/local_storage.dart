@@ -13,13 +13,13 @@ class LocalStorage {
     }
   }
 
-  List<Region> getRegions() {
-    return box
-        .read('regions')
-        .map<Region>(
-          (region) => Region.fromJson(region),
-        )
-        .toList();
+  Future<List<Region>> getRegions() async {
+    final regions = await box.read('regions');
+    if (regions == null) {
+      return [];
+    } else {
+      return regions.map<Region>((e) => Region.fromJson(e)).toList();
+    }
   }
 
   saveData(String key, dynamic value) {

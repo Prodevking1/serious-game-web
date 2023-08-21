@@ -147,7 +147,7 @@ class RegisterScreen extends StatelessWidget {
                   width: Get.width * 0.4,
                   text: "Continuer sans compte",
                   onPressed: () {
-                    Get.toNamed(AppRouter.homePage);
+                    Get.toNamed(AppRoutes.homePage);
                   },
                 ),
               ),

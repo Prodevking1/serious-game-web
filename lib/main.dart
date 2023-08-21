@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
   await Flame.device.setOrientation(DeviceOrientation.portraitUp);
   await dotenv.load(fileName: '.env');
+  await GetStorage.init();
 
   /* GameWidget(
     game: MyGame(),
@@ -56,7 +58,7 @@ class EntryApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: const IntroScreen(),
-      getPages: AppRouter.getPage(),
+      getPages: AppRoutes.getPage(),
       initialBinding: BaseBinding(),
     );
   }

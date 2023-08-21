@@ -1,4 +1,5 @@
 import 'package:flame_game/presentation/controllers/evolution_controller.dart';
+import 'package:flame_game/presentation/controllers/party_controller.dart';
 import 'package:flame_game/presentation/controllers/region_controller.dart';
 import 'package:flame_game/presentation/screens/intro_screen.dart';
 import 'package:flame_game/presentation/screens/register_screen.dart';
@@ -22,10 +23,13 @@ class BaseBinding extends Bindings {
     Get.lazyPut(
       () => RegionController(),
     );
+    Get.lazyPut(
+      () => PartyController(),
+    );
   }
 }
 
-class AppRouter {
+class AppRoutes {
   static const initialPage = '/';
   static const introPage = '/intro';
   static const registerPage = '/register';
