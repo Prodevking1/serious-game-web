@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../data/source/local_storage.dart';
@@ -12,9 +13,9 @@ class RegionController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-
-    //generateRegions();
     await fetchAllRegions();
+    // await generateRegions();
+    // await localStorage.deleteAllData();
   }
 
   fetchAllRegions() async {
@@ -24,6 +25,10 @@ class RegionController extends GetxController {
   generateRegions() {
     List<Region> regions = [
       Region(
+        offset: Offset(
+          Get.height * 0.5,
+          Get.width * 0.08,
+        ),
         id: 1,
         name: 'Ouest',
         party: Party(
@@ -31,6 +36,10 @@ class RegionController extends GetxController {
         ),
       ),
       Region(
+        offset: Offset(
+          Get.height * 0.8,
+          Get.width * 0.15,
+        ),
         id: 2,
         name: 'Centre',
         party: Party(
@@ -38,6 +47,10 @@ class RegionController extends GetxController {
         ),
       ),
       Region(
+        offset: Offset(
+          Get.height * 0.35,
+          Get.width * 0.25,
+        ),
         id: 3,
         name: 'Est',
         party: Party(
@@ -45,6 +58,10 @@ class RegionController extends GetxController {
         ),
       ),
       Region(
+        offset: Offset(
+          Get.height * 0.5,
+          Get.width * 0.4,
+        ),
         id: 4,
         name: 'Sud',
         party: Party(
@@ -52,6 +69,10 @@ class RegionController extends GetxController {
         ),
       ),
       Region(
+        offset: Offset(
+          Get.height * 0.32,
+          Get.width * 0.6,
+        ),
         id: 5,
         name: 'Nord',
         party: Party(

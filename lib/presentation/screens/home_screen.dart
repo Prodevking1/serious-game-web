@@ -17,6 +17,8 @@ class HomeScreen extends StatelessWidget {
   final EvolutionController evolutionController = Get.find();
   final RegionController regionController = Get.find();
 
+  final Set<Offset> usedOffsets = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,44 +95,31 @@ class HomeScreen extends StatelessWidget {
         ),
         Stack(
           children: [
-            ...regionController.regions.asMap().entries.map(
-              (entry) {
-                final index = entry.key;
-                final region = entry.value;
-                const separationFactor =
-                    1.5; // Ajustez cette valeur comme vous le souhaitez
-                final totalHeight = Get.height;
-                final regionHeight = totalHeight / 5;
+            ...regionController.regions.map((region) {
+              return Positioned(
+                top: region.offset!.dy,
+                left: region.offset!.dx,
+                child: RegionPreviewWidget(
+                  region: region,
+                  onTap: () {
+                    Get.toNamed(AppRoutes.level1, arguments: region);
+                  },
+                ),
+              );
+            }
+                /*  Positioned(
+              top: Get.height * 0.3,
+              left: Get.width * 0.6,
+              child: RegionPreviewWidget(
+                region: regionController.regions[0],
+                onTap: () {
+                  Get.toNamed(AppRoutes.level1,
+                      arguments: regionController.regions[0]);
+                },
+              ),
+            ), */
 
-                final availableHeight = totalHeight -
-                    (regionHeight *
-                        regionController.regions.length *
-                        separationFactor);
-
-                final topOffset = availableHeight / 2 +
-                    index * regionHeight * separationFactor;
-
-                final random = Random();
-                final x = random.nextInt(100).toDouble();
-
-                return Positioned(
-                  left: x,
-                  top: topOffset,
-                  child: GestureDetector(
-                    onTap: () {
-                      /*  evolutionController.addRegion(region);
-                regionController.removeRegion(region); */
-                    },
-                    child: RegionPreviewWidget(
-                      region: region,
-                      onTap: () {
-                        Get.toNamed(AppRoutes.level1, arguments: region);
-                      },
-                    ),
-                  ),
-                );
-              },
-            ),
+                ),
           ],
         ),
       ],
