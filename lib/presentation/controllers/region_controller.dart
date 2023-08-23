@@ -13,13 +13,22 @@ class RegionController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await fetchAllRegions();
     // await generateRegions();
-    // await localStorage.deleteAllData();
+    // await addParties();
+    await fetchAllRegions();
+    // await localStorage.deleteAllData('parties');
   }
 
   fetchAllRegions() async {
-    regions.value = await localStorage.getRegions();
+    final res = await localStorage.rawQuery(
+      '''
+      SELECT * FROM regions join parties on regions.party_id = parties.id
+      ''',
+    );
+    regions.value = res.map((e) => Region.fromJson(e)).toList();
+    // res.map((e) => print(e)).toList();
+
+    print(regions);
   }
 
   generateRegions() {
@@ -31,9 +40,7 @@ class RegionController extends GetxController {
         ),
         id: 1,
         name: 'Ouest',
-        party: Party(
-          name: 'Parti de l\'Ouest',
-        ),
+        partyId: 1,
       ),
       Region(
         offset: Offset(
@@ -42,9 +49,7 @@ class RegionController extends GetxController {
         ),
         id: 2,
         name: 'Centre',
-        party: Party(
-          name: 'Parti du Centre',
-        ),
+        partyId: 2,
       ),
       Region(
         offset: Offset(
@@ -53,9 +58,7 @@ class RegionController extends GetxController {
         ),
         id: 3,
         name: 'Est',
-        party: Party(
-          name: 'Parti de l\'Est',
-        ),
+        partyId: 3,
       ),
       Region(
         offset: Offset(
@@ -64,9 +67,7 @@ class RegionController extends GetxController {
         ),
         id: 4,
         name: 'Sud',
-        party: Party(
-          name: 'Parti du Sud',
-        ),
+        partyId: 4,
       ),
       Region(
         offset: Offset(
@@ -75,13 +76,55 @@ class RegionController extends GetxController {
         ),
         id: 5,
         name: 'Nord',
-        party: Party(
-          name: 'Parti du Nord',
-        ),
+        partyId: 5,
       ),
     ];
-    for (var region in regions) {
-      localStorage.addNewRegion(region);
+
+    try {
+      for (var region in regions) {
+        localStorage.insertData(
+          "regions",
+          region.toJson(),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  addParties() {
+    List<Party> parties = [
+      Party(
+        id: 1,
+        name: 'Parti de l\'Ouest',
+        description: 'Le grand depart de Mounira pour l\'aventure',
+      ),
+      Party(
+        id: 2,
+        name: 'Parti du Centre',
+        description: 'Premiere mission de Mounira',
+      ),
+      Party(
+        id: 3,
+        name: 'Parti de l\'Est',
+        description: 'Mounira a la recherche de...',
+      ),
+      Party(
+        id: 4,
+        name: 'Parti du Sud',
+        description: 'Mounira a la recherche de...',
+      ),
+      Party(
+        id: 5,
+        name: 'Parti du Nord',
+        description: 'Mounira a la recherche de...',
+      ),
+    ];
+    for (var party in parties) {
+      localStorage.insertData(
+        "parties",
+        party.toJson(),
+      );
     }
   }
 }

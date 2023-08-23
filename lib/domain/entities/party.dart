@@ -33,7 +33,7 @@ class Party {
       totalScore: json['totalScore'],
       duration: json['duration'],
       finalScore: json['finalScore'],
-      status: Status.values[json['status']],
+      status: getStatusFromText(json['status']),
     );
   }
 
@@ -47,7 +47,24 @@ class Party {
       'totalScore': totalScore,
       'duration': duration,
       'finalScore': finalScore,
-      'status': status?.index,
+      'status': status!.name ?? Status.notStarted.name,
     };
+  }
+
+  static getStatusFromText(String statusText) {
+    switch (statusText) {
+      case 'Status.notStarted':
+        return Status.notStarted;
+      case 'Status.inProgress':
+        return Status.inProgress;
+      case 'Status.won':
+        return Status.won;
+      case 'Status.lost':
+        return Status.lost;
+      case 'Status.paused':
+        return Status.paused;
+      default:
+        return Status.notStarted;
+    }
   }
 }

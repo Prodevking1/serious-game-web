@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../data/source/local_storage.dart';
+import '../../domain/entities/stats.dart';
 
 class EvolutionController extends GetxController {
   LocalStorage localStorage = LocalStorage();
@@ -13,48 +14,50 @@ class EvolutionController extends GetxController {
 
   @override
   void onInit() async {
-    await fetchSavedScore();
-    await fetchCurrentLevel();
+    await fetchSavedStats();
+    //await fetchCurrentLevel();
     super.onInit();
   }
 
-  incrementScore(int score) async {
+  fetchSavedStats() {
+    final stats = localStorage.getData("stats");
+    print(stats);
+    return localStorage.getData("stats");
+  }
+
+  /* incrementScore(int score) async {
     _totalScore.value += score;
     await saveScore();
   }
 
   incrementLevel(int level) async {
     _level.value += level;
-    await saveLevel();
-  }
+    await updateLevel();
+  } */
 
-  fetchSavedScore() async {
+/*   fetchSavedScore() async {
     final res = await localStorage.getData("score");
     print(res);
-    if (res != null) {
-      _totalScore.value = res;
-    }
+    _totalScore.value = res;
   }
 
   fetchCurrentLevel() async {
     final res = await localStorage.getData("level");
     print(res);
-    if (res != null) {
-      _level.value = res;
-    }
-  }
+    _level.value = res;
+  } */
 
-  Future<void> saveScore() async {
+/*   Future<void> saveScore() async {
     try {
-      await localStorage.saveData("score", _totalScore.value);
+      await localStorage.insertData("score", _totalScore.value);
     } catch (e) {
       print(e);
     }
-  }
+  } */
 
-  Future<void> saveLevel() async {
+  Future<void> updateStats(Stats stats) async {
     try {
-      await localStorage.saveData("level", _level.value);
+      await localStorage.updateData("stats", stats.toJson());
     } catch (e) {
       print(e);
     }

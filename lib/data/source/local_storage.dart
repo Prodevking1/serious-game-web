@@ -1,51 +1,114 @@
-import 'package:flame_game/domain/entities/game_state.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
+import '../../domain/entities/game_state.dart';
 import '../../domain/entities/region.dart';
 
+class LocalDatabase {
+  Database? _database;
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await initDatabase();
+    return _database!;
+  }
+
+  Future<Database> initDatabase() async {
+    final databasesPath = await getDatabasesPath();
+    final path = join(databasesPath, 'your_database_name.db');
+    // deleteDatabase(path);
+    return await openDatabase(path, version: 1, onCreate: _onCreate);
+  }
+
+  Future<void> _onCreate(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE players (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        gender TEXT,
+        age INTEGER
+      );
+    ''');
+    await db.execute('''
+      CREATE TABLE parties (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        description TEXT,
+        startTime TEXT,
+        endTime TEXT,
+        totalScore INTEGER,
+        duration TEXT,
+        finalScore INTEGER,
+        status TEXT
+      );
+    ''');
+    await db.execute('''
+      CREATE TABLE stats (
+        id INTEGER PRIMARY KEY,
+        score INTEGER,
+        level INTEGER,
+        player_id INTEGER,
+        FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
+      );
+    ''');
+    await db.execute('''
+      CREATE TABLE regions (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        description TEXT,
+        party_id INTEGER,
+        offset_dx REAL,
+        offset_dy REAL,
+        FOREIGN KEY (party_id) REFERENCES parties(id) ON DELETE CASCADE
+      );
+    ''');
+  }
+}
+
 class LocalStorage {
-  final box = GetStorage();
+  final LocalDatabase db = LocalDatabase();
 
-  addNewRegion(Region region) {
-    if (box.read('regions') == null) {
-      box.write('regions', [region.toJson()]);
-    } else {
-      box.read('regions').add(region.toJson());
-    }
+  Future<void> insertData(String table, Map<String, dynamic> data) async {
+    final dbClient = await db.database;
+    await dbClient.insert(
+      table,
+      data,
+    );
   }
 
-  Future<List<Region>> getRegions() async {
-    final regions = await box.read('regions');
-    if (regions == null) {
-      return [];
-    } else {
-      return regions.map<Region>((e) => Region.fromJson(e)).toList();
-    }
+  Future<List<Map<String, dynamic>>> getData(String table) async {
+    final dbClient = await db.database;
+    return await dbClient.query(table);
   }
 
-  updateRegionStatus(Region region, Status status) {
-    final regions = box.read('regions');
-    if (regions != null) {
-      final index = regions.indexWhere((element) => element['id'] == region.id);
-      regions[index] = region.toJson();
-      box.write('regions', regions);
-    }
+  Future rawQuery(String query) async {
+    final dbClient = await db.database;
+    return await dbClient.rawQuery(query);
   }
 
-  saveData(String key, dynamic value) {
-    print('save data');
-    box.write(key, value);
+  Future<void> updateData(String table, Map<String, dynamic> data) async {
+    final dbClient = await db.database;
+    await dbClient.update(
+      table,
+      data,
+      where: 'id = ?',
+      whereArgs: [
+        data['id'],
+      ],
+    );
   }
 
-  dynamic getData(String key) {
-    return box.read(key);
+  Future<void> deleteData(String table, int id) async {
+    final dbClient = await db.database;
+    await dbClient.delete(
+      table,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 
-  deleteData(String key) {
-    box.remove(key);
-  }
-
-  deleteAllData() {
-    box.erase();
+  Future<void> deleteAllData(String table) async {
+    final dbClient = await db.database;
+    await dbClient.delete(table);
   }
 }

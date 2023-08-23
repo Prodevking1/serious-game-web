@@ -17,7 +17,7 @@ class RegionPreviewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (region?.party.status == Status.notStarted) {
+        if (region?.party!.status == Status.notStarted) {
           onTap!();
         } else {
           Get.dialog(
@@ -110,7 +110,7 @@ class RegionPreviewWidget extends StatelessWidget {
             width: 35,
             borderRadius: 100,
             backgroundColor: AppColors.tertiaryColor,
-            child: region?.party.status != Status.notStarted
+            child: region?.party!.status != Status.notStarted
                 ? const Center(
                     child: Icon(
                     Icons.check_rounded,

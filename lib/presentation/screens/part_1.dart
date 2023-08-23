@@ -108,12 +108,12 @@ class Level1Screen extends StatelessWidget {
           dialogueWithChief
         ],
         onDialogueEnd: () {
-          partyController.incrementPartyScore(
+          /* partyController.incrementPartyScore(
             region: region!,
             score: PartyReward.basicRewardPoints,
           );
           evolutionController.incrementScore(PartyReward.basicRewardPoints);
-          evolutionController.incrementLevel(1);
+          evolutionController.incrementLevel(1); */
           Get.offAllNamed(AppRoutes.homePage);
         });
   }

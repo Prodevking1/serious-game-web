@@ -16,6 +16,7 @@ dependencies:
   get: ^4.6.5
   get_storage: ^2.1.1
   just_audio: ^0.9.34
+  sqflite: ^2.3.0
   supabase: ^1.9.9
 
 dev_dependencies:
