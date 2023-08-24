@@ -53,15 +53,15 @@ class Party {
 
   static getStatusFromText(String statusText) {
     switch (statusText) {
-      case 'Status.notStarted':
+      case 'notStarted':
         return Status.notStarted;
-      case 'Status.inProgress':
+      case 'inProgress':
         return Status.inProgress;
-      case 'Status.won':
+      case 'won':
         return Status.won;
-      case 'Status.lost':
+      case 'lost':
         return Status.lost;
-      case 'Status.paused':
+      case 'paused':
         return Status.paused;
       default:
         return Status.notStarted;

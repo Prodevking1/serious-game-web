@@ -60,6 +60,7 @@ class EntryApp extends StatelessWidget {
       home: const IntroScreen(),
       getPages: AppRoutes.getPage(),
       initialBinding: BaseBinding(),
+      initialRoute: AppRoutes().initialRoute(),
     );
   }
 }

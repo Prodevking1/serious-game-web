@@ -32,10 +32,10 @@ class _DialogSceneState extends State<DialogScene> {
     String currentSpeaker =
         lines[_currentLineIndex % lines.length].speaker.name;
 
-    void nextLine() {
+    nextLine() async {
       if (_currentDialogueIndex == widget.dialogue.length - 1 &&
           _currentLineIndex == lines.length - 1) {
-        widget.onDialogueEnd.call();
+        await widget.onDialogueEnd.call();
       }
       if (_currentLineIndex == lines.length - 1) {
         setState(() {

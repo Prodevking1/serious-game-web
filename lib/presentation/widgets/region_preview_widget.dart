@@ -21,82 +21,111 @@ class RegionPreviewWidget extends StatelessWidget {
           onTap!();
         } else {
           Get.dialog(
+            transitionCurve: Curves.easeInOut,
             Dialog(
               child: CustomCard(
-                width: Get.width * 0.8,
-                height: Get.height * 0.8,
+                width: Get.width * 0.5,
+                height: Get.height * 0.5,
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    Text(
-                      'Tu as déjà commencé cette partie',
-                      style: AppTextStyles.body.copyWith(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                borderRadius: 15,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.verified_user_outlined,
+                            size: 30,
+                          ),
+                          Text(
+                            'Tu as déjà terminer cette partie',
+                            style: AppTextStyles.body,
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Veux-tu continuer cette partie ?',
-                      style: AppTextStyles.body.copyWith(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(
+                        height: 30,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CustomCard(
-                          width: Get.width * 0.2,
-                          height: Get.height * 0.05,
-                          padding: const EdgeInsets.all(10),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: Text(
-                              'Non',
-                              style: AppTextStyles.body.copyWith(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                      Text(
+                        'Veux-tu rejouer?',
+                        style: AppTextStyles.body.copyWith(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          /* CustomCard(
+                            width: Get.width * 0.2,
+                            height: Get.height * 0.05,
+                            padding: const EdgeInsets.all(10),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Text(
+                                'Non',
+                                style: AppTextStyles.body.copyWith(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        CustomCard(
-                          width: Get.width * 0.2,
-                          height: Get.height * 0.05,
-                          padding: const EdgeInsets.all(10),
-                          child: GestureDetector(
-                            onTap: () {
-                              /* Get.back();
+                          CustomCard(
+                            width: Get.width * 0.2,
+                            height: Get.height * 0.05,
+                            padding: const EdgeInsets.all(10),
+                            child: GestureDetector(
+                              onTap: () {
+                                /* Get.back();
                               Get.toNamed(AppRoutes.gameScreen,
                                   arguments: GameState(
                                       region: region,
                                       party: region?.party,
                                       person: region?.party.person)); */
-                            },
-                            child: Text(
-                              'Oui',
-                              style: AppTextStyles.body.copyWith(
-                                fontSize: 16,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
+                              },
+                              child: Text(
+                                'Oui',
+                                style: AppTextStyles.body.copyWith(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+                          ), */
+                          TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: Text(
+                                'Non',
+                                style: AppTextStyles.body
+                                    .copyWith(color: Colors.red),
+                              )),
+                          TextButton(
+                              onPressed: () {
+                                onTap!();
+                              },
+                              child: Text(
+                                'Oui',
+                                style: AppTextStyles.body
+                                    .copyWith(color: Colors.green),
+                              )),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

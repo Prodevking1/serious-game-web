@@ -1,3 +1,4 @@
+import 'package:flame_game/data/source/local_storage.dart';
 import 'package:flame_game/presentation/controllers/evolution_controller.dart';
 import 'package:flame_game/presentation/controllers/party_controller.dart';
 import 'package:flame_game/presentation/controllers/region_controller.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
 
+import '../../domain/entities/player.dart';
 import '../controllers/auth_controller.dart';
 import '../screens/home_screen.dart';
 import '../screens/part_1.dart';
@@ -14,6 +16,9 @@ import '../screens/part_1.dart';
 class BaseBinding extends Bindings {
   @override
   void dependencies() async {
+    Get.lazyPut(
+      () => AuthController(),
+    );
     Get.lazyPut(() => SupabaseClient(
         dotenv.env['SUPABASE_URL']!, dotenv.env['SUPABASE_KEY']!));
     Get.lazyPut(() => AuthController());
@@ -62,7 +67,12 @@ class AppRoutes {
     ];
   }
 
-  initialRoute() {
-    return introPage;
+  String initialRoute()  {
+    LocalStorage localStorage = LocalStorage();
+
+
+    var player;
+    player = ( localStorage.getData('players'));
+    return player!=null ? homePage : introPage;
   }
 }

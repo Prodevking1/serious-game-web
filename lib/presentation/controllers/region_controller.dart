@@ -20,15 +20,16 @@ class RegionController extends GetxController {
   }
 
   fetchAllRegions() async {
+    regions.clear();
     final res = await localStorage.rawQuery(
       '''
       SELECT * FROM regions join parties on regions.party_id = parties.id
       ''',
     );
-    regions.value = res.map((e) => Region.fromJson(e)).toList();
-    // res.map((e) => print(e)).toList();
-
-    print(regions);
+    final regionsList = res.map((e) => Region.fromJson(e)).toList();
+    regionsList.forEach((element) {
+      regions.add(element);
+    });
   }
 
   generateRegions() {

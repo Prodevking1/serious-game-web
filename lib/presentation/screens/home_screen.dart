@@ -58,8 +58,9 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20),
           child: Align(
             alignment: Alignment.topCenter,
-            child: Obx(
-              () => CustomCard(
+            child: Obx(() {
+              // regionController.fetchAllRegions();
+              return CustomCard(
                 backgroundColor: Colors.yellow,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 width: Get.width * 0.35,
@@ -89,8 +90,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ),
+              );
+            }),
           ),
         ),
         Stack(

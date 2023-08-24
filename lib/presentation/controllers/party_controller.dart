@@ -3,18 +3,13 @@ import 'package:flame_game/domain/entities/region.dart';
 import 'package:get/get.dart';
 
 import '../../data/source/local_storage.dart';
+import '../../domain/entities/party.dart';
 
 class PartyController extends GetxController {
   LocalStorage localStorage = LocalStorage();
 
- /*  updateRegionStatus(Status status) {
-    localStorage.saveData("region", "region");
+  Future updatePartyStatus(Party party, Status newStatus) async {
+    party.status = newStatus;
+    await localStorage.updateData("parties", party.toJson());
   }
-
-  void updateGameStatus(Status gameState) {}
-
-  incrementPartyScore({required Region region, required int score}) {
-    region.party.finalScore = (region.party.finalScore ?? 0) + score;
-    localStorage.saveData("region", region.toJson());
-  } */
 }

@@ -1,4 +1,6 @@
+import 'package:flame_game/domain/entities/game_state.dart';
 import 'package:flame_game/domain/entities/line.dart';
+import 'package:flame_game/presentation/controllers/region_controller.dart';
 import 'package:flame_game/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,12 +19,12 @@ class Level1Screen extends StatelessWidget {
   });
 
   EvolutionController evolutionController = Get.find();
-
   PartyController partyController = Get.find();
   final Region? region = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
+    print(region!.party!.status);
     final Person mounira = Person(name: 'Mounira', imagePath: AppMedia.mounira);
     final Person teacher =
         Person(name: 'Enseignante', imagePath: AppMedia.teacher);
@@ -107,13 +109,11 @@ class Level1Screen extends StatelessWidget {
           dialogueWithDjamila,
           dialogueWithChief
         ],
-        onDialogueEnd: () {
-          /* partyController.incrementPartyScore(
-            region: region!,
-            score: PartyReward.basicRewardPoints,
-          );
-          evolutionController.incrementScore(PartyReward.basicRewardPoints);
-          evolutionController.incrementLevel(1); */
+        onDialogueEnd: () async {
+          await partyController.updatePartyStatus(region!.party!, Status.won);
+          await evolutionController.incrementScoreAndLevel(
+              score: PartyReward.basicRewardPoints);
+          Get.find<RegionController>().onInit();
           Get.offAllNamed(AppRoutes.homePage);
         });
   }

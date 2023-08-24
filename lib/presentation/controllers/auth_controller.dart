@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
 
+import '../../data/source/local_storage.dart';
+import '../../domain/entities/player.dart';
 import '../routes/router.dart';
 
 class AuthController extends GetxService {
   final AuthService _authService = AuthService();
+  static final localStorage = LocalStorage();
+
+  
 
   Future signUp(
       {required String email,
@@ -73,5 +78,29 @@ class AuthController extends GetxService {
   Future signOut() async {
     await _authService.signOut();
     Get.offAllNamed(AppRoutes.introPage);
+  }
+
+  continueAsGuest() async {
+    final existingGuest = await localStorage
+        .rawQuery("SELECT * FROM players WHERE name = 'Guest'");
+    if (existingGuest.isEmpty) {
+      try {
+        await localStorage.insertData(
+          "players",
+          Player(id: 1, userName: 'Guest').toJson(),
+        );
+        Get.toNamed(AppRoutes.homePage);
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      Get.toNamed(AppRoutes.homePage);
+    }
+  }
+
+  Future<Player> getCurrentPlayer() async {
+    final res = (await localStorage.getData('players')).first;
+    final currentPlayer = Player.fromJson(res);
+    return currentPlayer;
   }
 }

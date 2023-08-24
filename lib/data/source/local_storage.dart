@@ -47,7 +47,6 @@ class LocalDatabase {
         id INTEGER PRIMARY KEY,
         score INTEGER,
         level INTEGER,
-        player_id INTEGER,
         FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
       );
     ''');
@@ -87,15 +86,19 @@ class LocalStorage {
   }
 
   Future<void> updateData(String table, Map<String, dynamic> data) async {
-    final dbClient = await db.database;
-    await dbClient.update(
-      table,
-      data,
-      where: 'id = ?',
-      whereArgs: [
-        data['id'],
-      ],
-    );
+    try {
+      final dbClient = await db.database;
+      await dbClient.update(
+        table,
+        data,
+        where: 'id = ?',
+        whereArgs: [
+          data['id'],
+        ],
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> deleteData(String table, int id) async {
