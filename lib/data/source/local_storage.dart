@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -15,8 +16,8 @@ class LocalDatabase {
 
   Future<Database> initDatabase() async {
     final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, 'your_database_name.db');
-    // deleteDatabase(path);
+    final path = join(databasesPath, 'database.db');
+    deleteDatabase(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
@@ -45,6 +46,7 @@ class LocalDatabase {
     await db.execute('''
       CREATE TABLE stats (
         id INTEGER PRIMARY KEY,
+        player_id INTEGER,
         score INTEGER,
         level INTEGER,
         FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
@@ -66,6 +68,8 @@ class LocalDatabase {
 
 class LocalStorage {
   final LocalDatabase db = LocalDatabase();
+
+  final GetStorage storage = GetStorage();
 
   Future<void> insertData(String table, Map<String, dynamic> data) async {
     final dbClient = await db.database;
@@ -113,5 +117,13 @@ class LocalStorage {
   Future<void> deleteAllData(String table) async {
     final dbClient = await db.database;
     await dbClient.delete(table);
+  }
+
+  isUserLoggedIn() async {
+    return await storage.read('isUserLoggedIn') ?? false;
+  }
+
+  Future<void> setUserLoggedIn(bool value) async {
+    await storage.write('isUserLoggedIn', value);
   }
 }

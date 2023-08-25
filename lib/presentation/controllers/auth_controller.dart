@@ -6,13 +6,11 @@ import 'package:supabase/supabase.dart';
 
 import '../../data/source/local_storage.dart';
 import '../../domain/entities/player.dart';
-import '../routes/router.dart';
+import '../routes/app_routes.dart';
 
 class AuthController extends GetxService {
   final AuthService _authService = AuthService();
   static final localStorage = LocalStorage();
-
-  
 
   Future signUp(
       {required String email,
@@ -89,6 +87,12 @@ class AuthController extends GetxService {
           "players",
           Player(id: 1, userName: 'Guest').toJson(),
         );
+        await localStorage.insertData('stats', {
+          'player_id': 1,
+          'score': 0,
+          'level': 0,
+        });
+        await localStorage.setUserLoggedIn(true);
         Get.toNamed(AppRoutes.homePage);
       } catch (e) {
         print(e);

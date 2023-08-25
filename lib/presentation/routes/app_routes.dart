@@ -35,7 +35,7 @@ class BaseBinding extends Bindings {
 }
 
 class AppRoutes {
-  static const initialPage = '/';
+  static String initialPage = '/';
   static const introPage = '/intro';
   static const registerPage = '/register';
   static const homePage = '/home';
@@ -67,12 +67,16 @@ class AppRoutes {
     ];
   }
 
-  String initialRoute()  {
+  initialRoute() async {
     LocalStorage localStorage = LocalStorage();
+    // await localStorage.setUserLoggedIn(false);
 
-
-    var player;
-    player = ( localStorage.getData('players'));
-    return player!=null ? homePage : introPage;
+    var isLoggedIn = await localStorage.isUserLoggedIn();
+    if (isLoggedIn) {
+      initialPage = homePage;
+    } else {
+      initialPage = introPage;
+    }
+    // return player != null ? homePage : introPage;
   }
 }

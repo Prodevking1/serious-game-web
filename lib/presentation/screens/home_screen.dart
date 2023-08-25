@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flame_game/presentation/controllers/region_controller.dart';
-import 'package:flame_game/presentation/routes/router.dart';
+import 'package:flame_game/presentation/routes/app_routes.dart';
 import 'package:flame_game/presentation/widgets/card_widget.dart';
 import 'package:flame_game/presentation/widgets/region_preview_widget.dart';
 import 'package:flutter/material.dart';
@@ -94,21 +94,22 @@ class HomeScreen extends StatelessWidget {
             }),
           ),
         ),
-        Stack(
-          children: [
-            ...regionController.regions.map((region) {
-              return Positioned(
-                top: region.offset!.dy,
-                left: region.offset!.dx,
-                child: RegionPreviewWidget(
-                  region: region,
-                  onTap: () {
-                    Get.toNamed(AppRoutes.level1, arguments: region);
-                  },
-                ),
-              );
-            }
-                /*  Positioned(
+        Obx(
+          () => Stack(
+            children: [
+              ...regionController.regions.map((region) {
+                return Positioned(
+                  top: region.offset!.dy,
+                  left: region.offset!.dx,
+                  child: RegionPreviewWidget(
+                    region: region,
+                    onTap: () {
+                      Get.toNamed(AppRoutes.level1, arguments: region);
+                    },
+                  ),
+                );
+              }
+                  /*  Positioned(
               top: Get.height * 0.3,
               left: Get.width * 0.6,
               child: RegionPreviewWidget(
@@ -120,8 +121,9 @@ class HomeScreen extends StatelessWidget {
               ),
             ), */
 
-                ),
-          ],
+                  ),
+            ],
+          ),
         ),
       ],
     );

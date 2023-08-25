@@ -21,29 +21,33 @@ class EvolutionController extends GetxController {
   @override
   void onInit() async {
     await fetchSavedStats();
-    _player = await authController.getCurrentPlayer();
+    // _player = await authController.getCurrentPlayer();
     // await localStorage.deleteAllData("stats");
     super.onInit();
   }
 
   fetchSavedStats() async {
     final stats = await localStorage.getData("stats");
-    print(stats);
-    /* _totalScore.value = stats["score"];
-    _level.value = stats["level"]; */
+    _totalScore.value = stats.first["score"];
+    _level.value = stats.first["level"];
   }
 
   Future incrementScoreAndLevel({required int score}) async {
-    print("incrementScoreAndLevel");
     _totalScore.value += score;
     _level.value += 1;
     await updateStats();
   }
 
   Future updateStats() async {
+    _player = await authController.getCurrentPlayer();
+
     if (_player != null) {
-      Stats newStats =
-          Stats(player_id: _player!.id, total_score: totalScore, level: level);
+      Stats newStats = Stats(
+          player_id: _player!.id,
+          total_score: _totalScore.value,
+          level: _level.value);
+      print(newStats.toJson());
+
       try {
         await localStorage.updateData(
           "stats",

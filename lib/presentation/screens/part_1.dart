@@ -10,7 +10,7 @@ import '../../domain/entities/person.dart';
 import '../../domain/entities/region.dart';
 import '../controllers/evolution_controller.dart';
 import '../controllers/party_controller.dart';
-import '../routes/router.dart';
+import '../routes/app_routes.dart';
 import '../widgets/dialog_scene.dart';
 
 class Level1Screen extends StatelessWidget {
@@ -111,10 +111,33 @@ class Level1Screen extends StatelessWidget {
         ],
         onDialogueEnd: () async {
           await partyController.updatePartyStatus(region!.party!, Status.won);
-          await evolutionController.incrementScoreAndLevel(
-              score: PartyReward.basicRewardPoints);
-          Get.find<RegionController>().onInit();
-          Get.offAllNamed(AppRoutes.homePage);
+
+          Get.dialog(
+            barrierDismissible: false,
+            AlertDialog(
+              title: const Text(
+                style: AppTextStyles.body,
+                'Bravo ! Tu viens de gagner ${PartyReward.basicRewardPoints} points',
+              ),
+              content: const Text(
+                "L'éducation est très importante pour les filles autant que pour les garçons !",
+                style: AppTextStyles.subtitle,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await evolutionController.incrementScoreAndLevel(
+                        score: PartyReward.basicRewardPoints);
+                    Get.offAllNamed(AppRoutes.homePage);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+          // Get.find<RegionController>().onInit();
+          // Get.find<EvolutionController>().onInit();
+          // Get.offAllNamed(AppRoutes.homePage);
         });
   }
 }

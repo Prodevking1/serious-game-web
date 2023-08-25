@@ -1,7 +1,7 @@
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame_game/presentation/routes/router.dart';
+import 'package:flame_game/presentation/routes/app_routes.dart';
 import 'package:flame_game/presentation/screens/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +15,8 @@ Future<void> main() async {
   await Flame.device.setOrientation(DeviceOrientation.portraitUp);
   await dotenv.load(fileName: '.env');
   await GetStorage.init();
+
+  final initialRoute = await AppRoutes().initialRoute();
 
   /* GameWidget(
     game: MyGame(),
@@ -60,7 +62,7 @@ class EntryApp extends StatelessWidget {
       home: const IntroScreen(),
       getPages: AppRoutes.getPage(),
       initialBinding: BaseBinding(),
-      initialRoute: AppRoutes().initialRoute(),
+      initialRoute: AppRoutes.initialPage,
     );
   }
 }

@@ -13,6 +13,7 @@ class Stats {
       player_id: json['player_id'],
       total_score: json['total_score'],
       level: json['level'],
+      
     );
   }
 

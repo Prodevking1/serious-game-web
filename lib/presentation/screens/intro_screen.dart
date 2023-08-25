@@ -1,4 +1,4 @@
-import 'package:flame_game/presentation/routes/router.dart';
+import 'package:flame_game/presentation/routes/app_routes.dart';
 import 'package:flame_game/presentation/widgets/card_widget.dart';
 import 'package:flame_game/utils/constants.dart';
 import 'package:flame_game/utils/helpers.dart';

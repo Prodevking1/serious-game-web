@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../domain/entities/game_state.dart';
 import '../../domain/entities/region.dart';
-import '../routes/router.dart';
+import '../routes/app_routes.dart';
 
 class RegionPreviewWidget extends StatelessWidget {
   final Region? region;
