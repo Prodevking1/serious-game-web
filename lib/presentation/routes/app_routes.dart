@@ -12,6 +12,7 @@ import '../../domain/entities/player.dart';
 import '../controllers/auth_controller.dart';
 import '../screens/home_screen.dart';
 import '../screens/part_1.dart';
+import '../screens/part_2.dart';
 
 class BaseBinding extends Bindings {
   @override
@@ -41,6 +42,7 @@ class AppRoutes {
   static const homePage = '/home';
   static const profilePage = '/profile';
   static const level1 = '/level1';
+  static const level2 = '/level2';
 
   static List<GetPage<dynamic>> getPage() {
     return [
@@ -64,12 +66,17 @@ class AppRoutes {
         page: () => Level1Screen(),
         binding: BaseBinding(),
       ),
+      GetPage(
+        name: level2,
+        page: () =>  Level2Screen(),
+        binding: BaseBinding(),
+      ),
     ];
   }
 
   initialRoute() async {
     LocalStorage localStorage = LocalStorage();
-    // await localStorage.setUserLoggedIn(false);
+    await localStorage.setUserLoggedIn(false);
 
     var isLoggedIn = await localStorage.isUserLoggedIn();
     if (isLoggedIn) {

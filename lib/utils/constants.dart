@@ -40,6 +40,8 @@ class AppMedia {
   static const String safi = 'assets/images/safi.png';
   static const String djamila = 'assets/images/safi.png';
   static const String chief = 'assets/images/chief.png';
+
+  static const String animtedBackground = 'assets/animations/background.json';
 }
 
 class AppColors {
@@ -50,6 +52,8 @@ class AppColors {
 
 class PartyReward {
   static const int basicRewardPoints = 100;
-  
   static const int bonusRewardPoints = 50;
+
+  static const int wrongAnswerPenalty = 10;
+  static const int correctAnswerReward = 20;
 }

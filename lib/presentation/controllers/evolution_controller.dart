@@ -1,4 +1,5 @@
 import 'package:flame_game/presentation/controllers/auth_controller.dart';
+import 'package:flame_game/utils/constants.dart';
 import 'package:get/get.dart';
 
 import '../../data/source/local_storage.dart';
@@ -57,5 +58,19 @@ class EvolutionController extends GetxController {
         print(e);
       }
     }
+  }
+
+  void punishPlayer() {
+    _totalScore.value -= PartyReward.wrongAnswerPenalty;
+  }
+
+  void rewardPlayer() {
+    _totalScore.value += PartyReward.correctAnswerReward;
+  }
+
+  Future resetStats() async {
+    _totalScore.value = 0;
+    _level.value = 0;
+    await updateStats();
   }
 }

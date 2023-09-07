@@ -17,7 +17,7 @@ class LocalDatabase {
   Future<Database> initDatabase() async {
     final databasesPath = await getDatabasesPath();
     final path = join(databasesPath, 'database.db');
-    deleteDatabase(path);
+    // deleteDatabase(path);
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 

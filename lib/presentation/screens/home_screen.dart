@@ -97,31 +97,20 @@ class HomeScreen extends StatelessWidget {
         Obx(
           () => Stack(
             children: [
-              ...regionController.regions.map((region) {
-                return Positioned(
-                  top: region.offset!.dy,
-                  left: region.offset!.dx,
-                  child: RegionPreviewWidget(
-                    region: region,
-                    onTap: () {
-                      Get.toNamed(AppRoutes.level1, arguments: region);
-                    },
-                  ),
-                );
-              }
-                  /*  Positioned(
-              top: Get.height * 0.3,
-              left: Get.width * 0.6,
-              child: RegionPreviewWidget(
-                region: regionController.regions[0],
-                onTap: () {
-                  Get.toNamed(AppRoutes.level1,
-                      arguments: regionController.regions[0]);
+              ...regionController.regions.map(
+                (region) {
+                  return Positioned(
+                    top: region.offset!.dy,
+                    left: region.offset!.dx,
+                    child: RegionPreviewWidget(
+                      region: region,
+                      onTap: () {
+                        Get.toNamed(AppRoutes.level2, arguments: region);
+                      },
+                    ),
+                  );
                 },
               ),
-            ), */
-
-                  ),
             ],
           ),
         ),
