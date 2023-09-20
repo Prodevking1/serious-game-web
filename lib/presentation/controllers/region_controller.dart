@@ -1,3 +1,4 @@
+import 'package:flame_game/presentation/routes/app_routes.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +21,7 @@ class RegionController extends GetxController {
   }
 
   fetchAllRegions() async {
-    regions.clear();
+    // regions.clear();
     final res = await localStorage.rawQuery(
       '''
       SELECT * FROM regions join parties on regions.party_id = parties.id
@@ -42,6 +43,7 @@ class RegionController extends GetxController {
         id: 1,
         name: 'Ouest',
         partyId: 1,
+        route: AppRoutes.level1,
       ),
       Region(
         offset: Offset(
@@ -51,6 +53,7 @@ class RegionController extends GetxController {
         id: 2,
         name: 'Centre',
         partyId: 2,
+        route: AppRoutes.level2,
       ),
       Region(
         offset: Offset(
@@ -60,6 +63,7 @@ class RegionController extends GetxController {
         id: 3,
         name: 'Est',
         partyId: 3,
+        route: AppRoutes.level2,
       ),
       Region(
         offset: Offset(
@@ -69,6 +73,7 @@ class RegionController extends GetxController {
         id: 4,
         name: 'Sud',
         partyId: 4,
+        route: AppRoutes.level2,
       ),
       Region(
         offset: Offset(
@@ -78,6 +83,7 @@ class RegionController extends GetxController {
         id: 5,
         name: 'Nord',
         partyId: 5,
+        route: AppRoutes.level2,
       ),
     ];
 

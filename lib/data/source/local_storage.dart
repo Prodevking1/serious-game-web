@@ -60,6 +60,7 @@ class LocalDatabase {
         party_id INTEGER,
         offset_dx REAL,
         offset_dy REAL,
+        route TEXT,
         FOREIGN KEY (party_id) REFERENCES parties(id) ON DELETE CASCADE
       );
     ''');

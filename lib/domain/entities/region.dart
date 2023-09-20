@@ -8,6 +8,7 @@ class Region {
   Party? party;
   Offset? offset;
   int? partyId;
+  String? route;
 
   Region({
     this.id,
@@ -16,6 +17,7 @@ class Region {
     this.party,
     this.offset,
     this.partyId,
+    this.route,
   });
 
   factory Region.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class Region {
       description: json['description'],
       party: Party.fromJson(json),
       offset: Offset(json['offset_dx'], json['offset_dy']),
+      route: json['route'],
     );
   }
 
@@ -37,6 +40,7 @@ class Region {
       'offset_dy': offset!.dx,
       'offset_dx': offset!.dy,
       'party_id': partyId,
+      'route': route,
     };
   }
 }

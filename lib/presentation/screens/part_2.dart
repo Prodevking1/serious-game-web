@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flame_game/presentation/controllers/party_controller.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,13 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../domain/entities/dialog.dart';
+import '../../domain/entities/game_state.dart';
 import '../../domain/entities/line.dart';
 import '../../domain/entities/person.dart';
+import '../../domain/entities/region.dart';
 import '../../utils/constants.dart';
 import '../controllers/evolution_controller.dart';
+import '../routes/app_routes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/card_widget.dart';
 
@@ -24,11 +28,13 @@ class Level2Screen extends StatefulWidget {
 class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
   static PartyController partyController = Get.find();
   EvolutionController evolutionController = Get.find();
+  final Region region = Get.arguments;
 
   int _currentLineIndex = 0;
   int _currentDialogueIndex = 0;
+  int _correctsAnswersNumber = 0;
 
-  final int answerDuration = 30;
+  final int answerDuration = 10;
   bool isCorrectAnswer = false;
   int? correctAnswerIndex;
   int currentPossibleAnswersIndex = 0;
@@ -134,7 +140,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
             Align(
               alignment: Alignment.bottomLeft,
               child: Opacity(
-                opacity: currentSpeaker == 'Mounira' ? 1 : 0.3,
+                opacity: 0.8,
                 child: Container(
                   height: Get.height / 1,
                   width: Get.width / 4,
@@ -155,30 +161,22 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                 ),
               ),
             ),
-
-            /* Container(
-              // Your background image or map image goes here
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage(
-                    AppMedia.mapImage,
+            Positioned(
+              top: Get.height * 0.07,
+              left: Get.width * 0.3,
+              child: Obx(
+                () => AnimatedFlipCounter(
+                  suffix: " 🏆",
+                  duration: const Duration(milliseconds: 500),
+                  value: EvolutionController.totalScore.toDouble(),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: Colors.white,
                   ),
                 ),
               ),
-            ), */
-
-            Positioned(
-                top: Get.height * 0.07,
-                left: Get.width * 0.3,
-                child: Obx(() => Text(
-                      '${EvolutionController.totalScore} 🏆',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                        color: Colors.white,
-                      ),
-                    ))),
+            ),
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
@@ -203,9 +201,9 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                   isReverse: true,
                   isReverseAnimation: true,
                   isTimerTextShown: true,
-                  autoStart: true,
+                  autoStart: false,
                   onStart: () {},
-                  onComplete: () {
+                  onComplete: () async {
                     partyController
                         .answerToQuestion(
                             possiblesAnswers[currentPossibleAnswersIndex])
@@ -223,6 +221,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                           });
                         });
                       } else {
+                        punishWrongAnswer();
                         setState(() {
                           isAnimating = true;
                         });
@@ -232,6 +231,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                             isAnimating = false;
                           });
                           nextQuestions();
+                          _countDownController.restart();
                         });
                       }
                     });
@@ -283,6 +283,11 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
+                      if (currentPossibleAnswersIndex ==
+                          allQuestions.length - 1) {
+                        _buildFinishPartyWidget();
+                      }
+                      _countDownController.restart();
                       partyController
                           .answerToQuestion(possiblesAnswers[index])
                           .then((value) {
@@ -310,7 +315,12 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                             setState(() {
                               isAnimating = false;
                             });
-                            nextQuestions();
+                            if (currentPossibleAnswersIndex ==
+                                allQuestions.length - 1) {
+                              _buildFinishPartyWidget();
+                            } else {
+                              nextQuestions();
+                            }
                           });
                         }
                       });
@@ -353,7 +363,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
             Align(
               alignment: Alignment.bottomRight,
               child: Opacity(
-                opacity: currentSpeaker != 'Mounira' ? 1 : 0.3,
+                opacity: 0.8,
                 child: Container(
                   height: Get.height / 1,
                   width: Get.width / 4,
@@ -397,6 +407,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
   }
 
   rewardCorrectAnswer() {
+    _correctsAnswersNumber++;
     evolutionController.rewardPlayer();
     setState(() {
       isCorrectAnswer = !isCorrectAnswer;
@@ -436,7 +447,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
 
   showPartyObjectivesWidget() {
     Get.dialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
       AlertDialog(
         title: const Center(
           child: Text(
@@ -455,11 +466,49 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
           CustomGameButton(
             text: 'Je commence',
             onPressed: () {
+              startCountDown();
               Get.back();
             },
           )
         ],
       ),
     );
+  }
+
+  _buildFinishPartyWidget() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Center(
+              child: Text(
+                _correctsAnswersNumber >= allQuestions.length
+                    ? '🎉 Bravo !'
+                    : '😢 Dommage !',
+                style: AppTextStyles.title,
+              ),
+            ),
+            content: SizedBox(
+              width: 300,
+              child: Text(
+                _correctsAnswersNumber >= allQuestions.length
+                    ? "Tu as réussi à convaincre la mère de Djamila de la laisser aller à l'école."
+                    : "Tu n'as pas réussi à convaincre la mère de Djamila de la laisser aller à l'école.",
+                style: AppTextStyles.body,
+              ),
+            ),
+            actions: [
+              CustomGameButton(
+                text: 'Revenir à l\'accueil',
+                onPressed: () {
+                  partyController.updatePartyStatus(region.party!, Status.won);
+                  Get.back();
+                  Get.back();
+                },
+              )
+            ],
+          );
+        });
   }
 }

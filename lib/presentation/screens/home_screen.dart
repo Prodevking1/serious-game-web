@@ -105,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                     child: RegionPreviewWidget(
                       region: region,
                       onTap: () {
-                        Get.toNamed(AppRoutes.level2, arguments: region);
+                        Get.toNamed(region.route!, arguments: region);
                       },
                     ),
                   );
