@@ -34,7 +34,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
   int _currentDialogueIndex = 0;
   int _correctsAnswersNumber = 0;
 
-  final int answerDuration = 10;
+  final int answerDuration = 25;
   bool isCorrectAnswer = false;
   int? correctAnswerIndex;
   int currentPossibleAnswersIndex = 0;
@@ -206,7 +206,8 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                   onComplete: () async {
                     partyController
                         .answerToQuestion(
-                            possiblesAnswers[currentPossibleAnswersIndex])
+                      possiblesAnswers[currentPossibleAnswersIndex],
+                    )
                         .then((value) {
                       if (value) {
                         rewardCorrectAnswer();
@@ -237,7 +238,6 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                     });
                   },
                   onChange: (String timeStamp) {
-                    debugPrint('Countdown Changed $timeStamp');
                   },
                   timeFormatterFunction: (defaultFormatterFunction, duration) {
                     return Function.apply(defaultFormatterFunction, [duration]);
@@ -303,6 +303,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                               isAnimating = false;
                               isCorrectAnswer = false;
                             });
+                            nextQuestions();
                           });
                         } else {
                           punishWrongAnswer();
@@ -419,11 +420,21 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
   }
 
   getCorrectAnswerIndex() {
+    print(possiblesAnswers.length);
+
     setState(() {
-      possiblesAnswers = allQuestions.elementAt(currentPossibleAnswersIndex);
+      /* possiblesAnswers = allQuestions.elementAt(currentPossibleAnswersIndex);
       currentQuestionTitle =
-          allQuestionsTitle.elementAt(currentPossibleAnswersIndex);
-    });
+          allQuestionsTitle.elementAt(currentPossibleAnswersIndex); */
+      if (currentPossibleAnswersIndex < allQuestions.length) {
+        possiblesAnswers = allQuestions.elementAt(currentPossibleAnswersIndex);
+        if (currentPossibleAnswersIndex < allQuestionsTitle.length) {
+          currentQuestionTitle =
+              allQuestionsTitle.elementAt(currentPossibleAnswersIndex);
+        }
+      }
+    },
+    );
     final list = allQuestions.elementAt(currentPossibleAnswersIndex);
     final elementCount = [];
     for (int i = 0; i < list.length; i++) {
@@ -438,11 +449,19 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
     }
   }
 
-  void nextQuestions() {
+  /* void nextQuestions() {
     setState(() {
       currentPossibleAnswersIndex++;
       getCorrectAnswerIndex();
     });
+  } */
+  void nextQuestions() {
+    if (currentPossibleAnswersIndex < allQuestions.length - 1) {
+      setState(() {
+        currentPossibleAnswersIndex++;
+        getCorrectAnswerIndex();
+      });
+    }
   }
 
   showPartyObjectivesWidget() {
@@ -483,7 +502,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
           return AlertDialog(
             title: Center(
               child: Text(
-                _correctsAnswersNumber >= allQuestions.length
+                _correctsAnswersNumber >= allQuestions.length / 2.5
                     ? '🎉 Bravo !'
                     : '😢 Dommage !',
                 style: AppTextStyles.title,
@@ -501,10 +520,14 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
             actions: [
               CustomGameButton(
                 text: 'Revenir à l\'accueil',
-                onPressed: () {
-                  partyController.updatePartyStatus(region.party!, Status.won);
-                  Get.back();
-                  Get.back();
+                onPressed: () async {
+                  await evolutionController.updateStats();
+                  await partyController.updatePartyStatus(
+                      region.party!,
+                      _correctsAnswersNumber >= allQuestions.length
+                          ? Status.won
+                          : Status.lost);
+                  Get.offAllNamed(AppRoutes.homePage);
                 },
               )
             ],

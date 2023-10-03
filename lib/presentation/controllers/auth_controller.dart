@@ -8,24 +8,30 @@ import '../../data/source/local_storage.dart';
 import '../../domain/entities/player.dart';
 import '../routes/app_routes.dart';
 
-class AuthController extends GetxService {
-  final AuthService _authService = AuthService();
+class AuthController extends GetxController {
+  AuthService authService = AuthService();
   static final localStorage = LocalStorage();
-
-  Future signUp(
+  RxBool isRegisterLoading = false.obs;
+  RxBool isLoginLoading = false.obs;
+  AuthController({authService});
+  Future<bool> signUp(
       {required String email,
       required String password,
       required String gender}) async {
+    isRegisterLoading.value = true;
+
     try {
-      await _authService.signUpWithEmailAndPassword(email, password);
+      await authService.signUpWithEmailAndPassword(email, password);
       Get.snackbar(
         'Félicitations',
         'Ton compte a été créé',
         colorText: Colors.white,
-        backgroundColor: AppColors.secondaryColor,
+        backgroundColor: AppColors.secondaryColor.withOpacity(0.6),
       );
       Get.toNamed(AppRoutes.homePage);
+      return true;
     } on AuthException catch (e) {
+      // throw Exception(e.message);
       if (e.statusCode == "400") {
         Get.snackbar(
           'Erreur',
@@ -33,26 +39,32 @@ class AuthController extends GetxService {
           colorText: Colors.white,
           backgroundColor: AppColors.primaryColor,
         );
-      } else {
-        Get.snackbar(
-          'Erreur',
-          e.message,
-          colorText: Colors.white,
-          backgroundColor: AppColors.primaryColor,
-        );
       }
+    } catch (e) {
+      Get.snackbar(
+        'Oh oh',
+        'Une erreur s\'est produite',
+        colorText: Colors.white,
+        backgroundColor: AppColors.primaryColor.withOpacity(0.6),
+      );
     }
+    isRegisterLoading.value = false;
+
+    return false;
   }
 
   Future signIn({required String email, required String password}) async {
+    isLoginLoading.value = true;
+
     try {
-      await _authService.signInWithEmailAndPassword(email, password);
+      await authService.signInWithEmailAndPassword(email, password);
       Get.snackbar(
         'Félicitations',
         'Tu es connecté',
         colorText: Colors.white,
         backgroundColor: AppColors.secondaryColor,
       );
+      localStorage.setUserLoggedIn(true);
       Get.toNamed(AppRoutes.homePage);
     } on AuthException catch (e) {
       if (e.statusCode == "400") {
@@ -60,21 +72,22 @@ class AuthController extends GetxService {
           'Erreur',
           'Cet joueur n\'existe pas',
           colorText: Colors.white,
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: AppColors.primaryColor.withOpacity(0.6),
         );
       } else {
         Get.snackbar(
           'Erreur',
           e.message,
           colorText: Colors.white,
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: AppColors.primaryColor.withOpacity(0.6),
         );
       }
     }
+    isLoginLoading.value = false;
   }
 
   Future signOut() async {
-    await _authService.signOut();
+    await authService.signOut();
     Get.offAllNamed(AppRoutes.introPage);
   }
 

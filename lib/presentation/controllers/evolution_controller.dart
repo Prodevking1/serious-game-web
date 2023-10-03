@@ -9,7 +9,8 @@ import '../../domain/entities/stats.dart';
 class EvolutionController extends GetxController {
   LocalStorage localStorage = LocalStorage();
 
-  AuthController authController = Get.find();
+  // AuthController authController = Get.find();
+  AuthController authController = AuthController();
 
   static final RxInt _totalScore = 0.obs;
   static final RxInt _level = 0.obs;
@@ -41,13 +42,11 @@ class EvolutionController extends GetxController {
 
   Future updateStats() async {
     _player = await authController.getCurrentPlayer();
-
     if (_player != null) {
       Stats newStats = Stats(
           player_id: _player!.id,
           total_score: _totalScore.value,
           level: _level.value);
-      print(newStats.toJson());
 
       try {
         await localStorage.updateData(

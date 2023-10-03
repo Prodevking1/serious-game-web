@@ -68,7 +68,7 @@ class AppRoutes {
       ),
       GetPage(
         name: level2,
-        page: () =>  Level2Screen(),
+        page: () => const Level2Screen(),
         binding: BaseBinding(),
       ),
     ];
@@ -76,7 +76,7 @@ class AppRoutes {
 
   initialRoute() async {
     LocalStorage localStorage = LocalStorage();
-    await localStorage.setUserLoggedIn(false);
+    // await localStorage.setUserLoggedIn(false);
 
     var isLoggedIn = await localStorage.isUserLoggedIn();
     if (isLoggedIn) {

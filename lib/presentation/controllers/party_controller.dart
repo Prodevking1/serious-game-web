@@ -15,25 +15,42 @@ class PartyController extends GetxController {
 
   //Part 2
   Map<String, List<String>> questionsWithAnswers = {
-    "Mais à quoi servira l'école pour ma fille ?": [
-      "Se marier et s'occuper de la maison",
-      "Savoir lire, écrire et avoir un métier",
-      "Cuisiner et obéir à son mari",
-      "Savoir lire, écrire et avoir un métier"
+    "Les filles devraient-elles être scolarisées comme les garçons ?": [
+      "Oui, l'éducation profite à toute la société",
+      "Oui, l'éducation est un droit pour tous",
+      "Non, l'école ne sert à rien pour les filles",
+      "Oui, l'éducation profite à toute la société"
     ],
-    "Nous n'avons pas les moyens de scolariser tous nos enfants. Que faire ?": [
-      "Envooyer seulement les garçons à l'école",
-      "Retirer tous les enfants de l'école",
-      "Scolariser filles et garçons car c'est un droit essentiel",
-      "Scolariser filles et garçons car c'est un droit essentiel"
+    "Qu'est-ce qui empêche la scolarisation des filles dans notre village ?": [
+      "Les traditions et le manque d'argent",
+      "Les traditions sur le rôle des femmes",
+      "Le manque d'argent des parents",
+      "Les traditions et le manque d'argent"
     ],
-    "Mon mari refuse d'envoyer notre fille à l'école. Comment le convaincre ?":
-        [
-      "Ne rien dire pour éviter les conflits",
-      "Expliquer que l'éducation bénéficie à toute la famille",
-      "Interdire à sa fille de lui parler tant qu'il n'accepte pas",
-      "Expliquer que l'éducation bénéficie à toute la famille"
+    "Comment l'éducation rend-elle les filles plus autonomes ?": [
+      "Plus de opportunités dans la vie",
+      "Plus d'opportunités et confiance en soi",
+      "Confiance en soi renforcée pour réaliser leurs rêves",
+      "Plus d'opportunités et confiance en soi"
     ],
+    "Une fille qui étudie peut-elle rester une bonne épouse ?": [
+      "Oui, elle sera plus épanouie",
+      "Non, elle ne respectera plus les traditions",
+      "Oui, l'éducation aide à s'épanouir dans la tradition",
+      "Oui, l'éducation aide à s'épanouir dans la tradition"
+    ],
+    "Comment motiver les parents à envoyer leurs filles à l'école ?": [
+      "Expliquer les bienfaits et aider financièrement",
+      "Expliquer les bienfaits de leur éducation",
+      "Proposer des bourses et aides financières",
+      "Expliquer les bienfaits et aider financièrement"
+    ],
+    "Quels changements pour le village avec plus de filles éduquées ?": [
+      "Des conditions de vie améliorées",
+      "Conditions de vie et société améliorées",
+      "Une société plus égale et respectueuse",
+      "Conditions de vie et société améliorées"
+    ]
   };
 
   Future<bool> answerToQuestion(String selectedAnswer) async {

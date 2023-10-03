@@ -52,7 +52,7 @@ class RegisterScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: CustomInput(
-                              hintText: 'Ton nom d\'utilisateur',
+                              hintText: 'Ton mail',
                               backgroundColor:
                                   AppColors.primaryColor.withOpacity(0.2),
                               borderRadius: 15,
@@ -115,22 +115,40 @@ class RegisterScreen extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              Expanded(
+                              /* Expanded(
                                 child: CustomGameButton(
                                   text: "Inscription",
                                   onPressed: () {
                                     singUp();
                                   },
                                 ),
-                              ),
+                              ), */
+                              Obx(() => authController.isRegisterLoading.value
+                                  ? const CircularProgressIndicator(
+                                      color: AppColors.primaryColor,
+                                    )
+                                  : Expanded(
+                                      child: CustomGameButton(
+                                        text: "Inscription",
+                                        onPressed: () {
+                                          singUp();
+                                        },
+                                      ),
+                                    )),
                               const SizedBox(width: 5),
-                              Expanded(
-                                child: CustomGameButton(
-                                  text: "Connexion",
-                                  onPressed: () {
-                                    login();
-                                  },
-                                ),
+                              Obx(
+                                () => authController.isLoginLoading.value
+                                    ? const CircularProgressIndicator(
+                                        color: AppColors.primaryColor,
+                                      )
+                                    : Expanded(
+                                        child: CustomGameButton(
+                                          text: "Connexion",
+                                          onPressed: () {
+                                            login();
+                                          },
+                                        ),
+                                      ),
                               ),
                             ],
                           )

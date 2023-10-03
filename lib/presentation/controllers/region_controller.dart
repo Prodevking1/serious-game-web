@@ -14,8 +14,8 @@ class RegionController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await generateRegions();
-    await addParties();
+    // await generateRegions();
+    // await addParties();
     await fetchAllRegions();
     // await localStorage.deleteAllData('parties');
   }
