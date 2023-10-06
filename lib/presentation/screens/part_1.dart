@@ -8,9 +8,11 @@ import 'package:get/get.dart';
 import '../../domain/entities/dialog.dart';
 import '../../domain/entities/person.dart';
 import '../../domain/entities/region.dart';
+import '../../utils/helpers.dart';
 import '../controllers/evolution_controller.dart';
 import '../controllers/party_controller.dart';
 import '../routes/app_routes.dart';
+import '../widgets/button_widget.dart';
 import '../widgets/dialog_scene.dart';
 
 class Level1Screen extends StatelessWidget {
@@ -115,28 +117,33 @@ class Level1Screen extends StatelessWidget {
           Get.dialog(
             barrierDismissible: false,
             AlertDialog(
-              title: const Text(
-                style: AppTextStyles.body,
-                'Bravo ! Tu viens de gagner ${PartyReward.basicRewardPoints} points',
+              title: const Center(
+                child: Text(
+                  '🎉 Bravo ! Tu viens de gagner ${PartyReward.basicRewardPoints} points',
+                  style: AppTextStyles.subtitle,
+                ),
               ),
-              content: const Text(
-                "L'éducation est très importante pour les filles autant que pour les garçons !",
-                style: AppTextStyles.subtitle,
+              content: const SizedBox(
+                width: 300,
+                child: Text(
+                  "L'éducation est très importante pour les filles autant que pour les garçons !",
+                  style: AppTextStyles.body,
+                ),
               ),
               actions: [
-                TextButton(
+                CustomGameButton(
+                  text: 'Continuer',
                   onPressed: () async {
                     await evolutionController.incrementScoreAndLevel(
                         score: PartyReward.basicRewardPoints);
                     Get.offAllNamed(AppRoutes.homePage);
                   },
-                  child: const Text('OK'),
-                ),
+                )
               ],
             ),
           );
-          // Get.find<RegionController>().onInit();
-          // Get.find<EvolutionController>().onInit();
+          Get.find<RegionController>().onInit();
+          Get.find<EvolutionController>().onInit();
           // Get.offAllNamed(AppRoutes.homePage);
         });
   }

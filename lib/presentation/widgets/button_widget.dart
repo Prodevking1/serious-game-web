@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flame_game/utils/constants.dart';
+import 'package:flame_game/utils/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomGameButton extends StatefulWidget {
   final String? text;
@@ -48,6 +52,8 @@ class _CustomGameButtonState extends State<CustomGameButton>
     super.dispose();
   }
 
+  final GameAudioPlayer gameAudioPlayer = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -55,6 +61,7 @@ class _CustomGameButtonState extends State<CustomGameButton>
         builder: (context, child) {
           return InkWell(
             onTap: () async => {
+              // gameAudioPlayer.playClickSound(),
               _controller.forward(from: 0),
               widget.onPressed?.call(),
             },

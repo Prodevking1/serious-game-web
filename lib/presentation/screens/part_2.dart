@@ -13,6 +13,7 @@ import '../../domain/entities/line.dart';
 import '../../domain/entities/person.dart';
 import '../../domain/entities/region.dart';
 import '../../utils/constants.dart';
+import '../../utils/helpers.dart';
 import '../controllers/evolution_controller.dart';
 import '../routes/app_routes.dart';
 import '../widgets/button_widget.dart';
@@ -69,6 +70,8 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
     _animationController.dispose();
     super.dispose();
   }
+
+  final GameAudioPlayer gameAudioPlayer = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -193,10 +196,6 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                   backgroundColor: Colors.white,
                   strokeWidth: 2.0,
                   strokeCap: StrokeCap.round,
-                  /* textStyle: const TextStyle(
-                    fontSize: 33.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold), */
                   textFormat: CountdownTextFormat.SS,
                   isReverse: true,
                   isReverseAnimation: true,
@@ -204,6 +203,8 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                   autoStart: false,
                   onStart: () {},
                   onComplete: () async {
+                    gameAudioPlayer.playClickSound();
+
                     partyController
                         .answerToQuestion(
                       possiblesAnswers[currentPossibleAnswersIndex],
@@ -223,6 +224,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                         });
                       } else {
                         punishWrongAnswer();
+
                         setState(() {
                           isAnimating = true;
                         });
@@ -237,8 +239,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                       }
                     });
                   },
-                  onChange: (String timeStamp) {
-                  },
+                  onChange: (String timeStamp) {},
                   timeFormatterFunction: (defaultFormatterFunction, duration) {
                     return Function.apply(defaultFormatterFunction, [duration]);
                   },
@@ -422,18 +423,20 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
   getCorrectAnswerIndex() {
     print(possiblesAnswers.length);
 
-    setState(() {
-      /* possiblesAnswers = allQuestions.elementAt(currentPossibleAnswersIndex);
+    setState(
+      () {
+        /* possiblesAnswers = allQuestions.elementAt(currentPossibleAnswersIndex);
       currentQuestionTitle =
           allQuestionsTitle.elementAt(currentPossibleAnswersIndex); */
-      if (currentPossibleAnswersIndex < allQuestions.length) {
-        possiblesAnswers = allQuestions.elementAt(currentPossibleAnswersIndex);
-        if (currentPossibleAnswersIndex < allQuestionsTitle.length) {
-          currentQuestionTitle =
-              allQuestionsTitle.elementAt(currentPossibleAnswersIndex);
+        if (currentPossibleAnswersIndex < allQuestions.length) {
+          possiblesAnswers =
+              allQuestions.elementAt(currentPossibleAnswersIndex);
+          if (currentPossibleAnswersIndex < allQuestionsTitle.length) {
+            currentQuestionTitle =
+                allQuestionsTitle.elementAt(currentPossibleAnswersIndex);
+          }
         }
-      }
-    },
+      },
     );
     final list = allQuestions.elementAt(currentPossibleAnswersIndex);
     final elementCount = [];

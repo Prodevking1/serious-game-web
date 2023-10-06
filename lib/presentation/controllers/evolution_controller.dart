@@ -1,6 +1,7 @@
 import 'package:flame_game/presentation/controllers/auth_controller.dart';
 import 'package:flame_game/utils/constants.dart';
 import 'package:get/get.dart';
+import 'package:supabase/supabase.dart';
 
 import '../../data/source/local_storage.dart';
 import '../../domain/entities/player.dart';
@@ -11,6 +12,8 @@ class EvolutionController extends GetxController {
 
   // AuthController authController = Get.find();
   AuthController authController = AuthController();
+
+  SupabaseClient supabaseClient = Get.find();
 
   static final RxInt _totalScore = 0.obs;
   static final RxInt _level = 0.obs;
@@ -23,15 +26,15 @@ class EvolutionController extends GetxController {
   @override
   void onInit() async {
     await fetchSavedStats();
-    // _player = await authController.getCurrentPlayer();
+    _player = await authController.getCurrentPlayer();
     // await localStorage.deleteAllData("stats");
     super.onInit();
   }
 
   fetchSavedStats() async {
-    final stats = await localStorage.getData("stats");
-    _totalScore.value = stats.first["score"];
-    _level.value = stats.first["level"];
+    // final stats = await localStorage.getData("stats");
+    // _totalScore.value = stats.first["score"];
+    // _level.value = stats.first["level"];
   }
 
   Future incrementScoreAndLevel({required int score}) async {
@@ -41,7 +44,6 @@ class EvolutionController extends GetxController {
   }
 
   Future updateStats() async {
-    _player = await authController.getCurrentPlayer();
     if (_player != null) {
       Stats newStats = Stats(
           player_id: _player!.id,
@@ -53,8 +55,14 @@ class EvolutionController extends GetxController {
           "stats",
           newStats.toJson(),
         );
+
+        await supabaseClient.from("player_stats").upsert({
+          "player_id": _player!.id,
+          "total_score": _totalScore.value,
+          "level": _level.value,
+        });
       } catch (e) {
-        print(e);
+        throw Exception(e);
       }
     }
   }

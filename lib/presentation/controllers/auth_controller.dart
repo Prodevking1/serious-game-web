@@ -14,6 +14,8 @@ class AuthController extends GetxController {
   RxBool isRegisterLoading = false.obs;
   RxBool isLoginLoading = false.obs;
   AuthController({authService});
+
+  SupabaseClient supabaseClient = Get.find();
   Future<bool> signUp(
       {required String email,
       required String password,
@@ -21,14 +23,28 @@ class AuthController extends GetxController {
     isRegisterLoading.value = true;
 
     try {
-      await authService.signUpWithEmailAndPassword(email, password);
+      final res = await authService.signUpWithEmailAndPassword(email, password);
+      if (res.user != null) {
+        await supabaseClient.from('players').insert({
+          'id': res.user!.id,
+          'name': email.split('@')[0],
+          'gender': gender,
+        });
+        await localStorage.insertData('players',
+            Player(id: res.user!.id, userName: email.split('@')[0]).toJson());
+      }
+      isRegisterLoading.value = false;
+
       Get.snackbar(
         'Félicitations',
         'Ton compte a été créé',
         colorText: Colors.white,
         backgroundColor: AppColors.secondaryColor.withOpacity(0.6),
       );
+      localStorage.setUserLoggedIn(true);
+
       Get.toNamed(AppRoutes.homePage);
+
       return true;
     } on AuthException catch (e) {
       // throw Exception(e.message);
@@ -47,8 +63,8 @@ class AuthController extends GetxController {
         colorText: Colors.white,
         backgroundColor: AppColors.primaryColor.withOpacity(0.6),
       );
+      throw Exception(e);
     }
-    isRegisterLoading.value = false;
 
     return false;
   }
@@ -57,14 +73,34 @@ class AuthController extends GetxController {
     isLoginLoading.value = true;
 
     try {
-      await authService.signInWithEmailAndPassword(email, password);
+      final response =
+          await authService.signInWithEmailAndPassword(email, password);
+      if (response.user != null) {
+        // await localStorage.insertData(
+        //     'players',
+        //     Player(id: response.user!.id, userName: email.split('@')[0])
+        //         .toJson());
+
+        final existingUser = await localStorage.rawQuery(
+            "SELECT * FROM players WHERE id = '${response.user!.id}'");
+        if (existingUser != null) {
+          await localStorage.updateData(
+            "players",
+            Player(id: response.user!.id, userName: email.split('@')[0])
+                .toJson(),
+          );
+          localStorage.setUserLoggedIn(true);
+        }
+      }
+      isLoginLoading.value = false;
+
       Get.snackbar(
         'Félicitations',
         'Tu es connecté',
         colorText: Colors.white,
         backgroundColor: AppColors.secondaryColor,
       );
-      localStorage.setUserLoggedIn(true);
+
       Get.toNamed(AppRoutes.homePage);
     } on AuthException catch (e) {
       if (e.statusCode == "400") {
@@ -82,8 +118,8 @@ class AuthController extends GetxController {
           backgroundColor: AppColors.primaryColor.withOpacity(0.6),
         );
       }
+      rethrow;
     }
-    isLoginLoading.value = false;
   }
 
   Future signOut() async {
@@ -98,7 +134,7 @@ class AuthController extends GetxController {
       try {
         await localStorage.insertData(
           "players",
-          Player(id: 1, userName: 'Guest').toJson(),
+          Player(id: "1", userName: 'Guest').toJson(),
         );
         await localStorage.insertData('stats', {
           'player_id': 1,
@@ -116,8 +152,9 @@ class AuthController extends GetxController {
   }
 
   Future<Player> getCurrentPlayer() async {
-    final res = (await localStorage.getData('players')).first;
-    final currentPlayer = Player.fromJson(res);
+    final res = await localStorage.getData('players');
+    print(res);
+    final currentPlayer = Player.fromJson(res.first);
     return currentPlayer;
   }
 }

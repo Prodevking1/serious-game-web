@@ -18,12 +18,12 @@ class _IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
-    //GameAudioPlayer().playAudio(AppMedia.introSound, isLooping: true);
+    // GameAudioPlayer().playBackgroundMusic;
   }
 
   @override
   void dispose() {
-    GameAudioPlayer().stopAudio();
+    // GameAudioPlayer().stopAudio();
     super.dispose();
   }
 

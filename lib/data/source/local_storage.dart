@@ -24,7 +24,7 @@ class LocalDatabase {
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE players (
-        id INTEGER PRIMARY KEY,
+        id TEXT PRIMARY KEY,
         name TEXT,
         gender TEXT,
         age INTEGER
@@ -46,7 +46,7 @@ class LocalDatabase {
     await db.execute('''
       CREATE TABLE stats (
         id INTEGER PRIMARY KEY,
-        player_id INTEGER,
+        player_id TEXT ,
         score INTEGER,
         level INTEGER,
         FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE

@@ -5,18 +5,20 @@ import 'package:get/get.dart';
 
 import '../../domain/entities/game_state.dart';
 import '../../domain/entities/region.dart';
+import '../../utils/helpers.dart';
 import '../routes/app_routes.dart';
 
 class RegionPreviewWidget extends StatelessWidget {
   final Region? region;
   final Function? onTap;
-  const RegionPreviewWidget({Key? key, this.region, this.onTap})
-      : super(key: key);
+  RegionPreviewWidget({Key? key, this.region, this.onTap}) : super(key: key);
+  final GameAudioPlayer gameAudioPlayer = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        gameAudioPlayer.playClickSound();
         if (region?.party!.status == Status.notStarted) {
           onTap!();
         } else {
@@ -106,7 +108,10 @@ class RegionPreviewWidget extends StatelessWidget {
                           ), */
                           TextButton(
                               onPressed: () {
-                                Get.back();
+                                gameAudioPlayer
+                                    .playClickSound()
+                                    .then((value) => Get.back());
+                                // Get.back();
                               },
                               child: Text(
                                 'Non',
@@ -115,6 +120,7 @@ class RegionPreviewWidget extends StatelessWidget {
                               )),
                           TextButton(
                               onPressed: () {
+                                gameAudioPlayer.playClickSound();
                                 onTap!();
                               },
                               child: Text(

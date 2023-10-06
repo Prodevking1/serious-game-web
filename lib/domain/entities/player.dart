@@ -1,5 +1,5 @@
 class Player {
-  int id;
+  String id;
   String userName;
 
   Player({

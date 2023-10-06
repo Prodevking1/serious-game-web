@@ -1,5 +1,5 @@
 class Stats {
-  final int player_id;
+  final String player_id;
   final int total_score;
   final int level;
 

@@ -4,6 +4,7 @@ import 'package:flame_game/presentation/controllers/party_controller.dart';
 import 'package:flame_game/presentation/controllers/region_controller.dart';
 import 'package:flame_game/presentation/screens/intro_screen.dart';
 import 'package:flame_game/presentation/screens/register_screen.dart';
+import 'package:flame_game/utils/helpers.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
@@ -31,6 +32,9 @@ class BaseBinding extends Bindings {
     );
     Get.lazyPut(
       () => PartyController(),
+    );
+    Get.lazyPut(
+      () => GameAudioPlayer(),
     );
   }
 }

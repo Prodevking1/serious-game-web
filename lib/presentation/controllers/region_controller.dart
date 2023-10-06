@@ -17,6 +17,7 @@ class RegionController extends GetxController {
     // await generateRegions();
     // await addParties();
     await fetchAllRegions();
+    // await localStorage.deleteAllData('regions');
     // await localStorage.deleteAllData('parties');
   }
 
@@ -127,11 +128,15 @@ class RegionController extends GetxController {
         description: 'Mounira a la recherche de...',
       ),
     ];
-    for (var party in parties) {
-      localStorage.insertData(
-        "parties",
-        party.toJson(),
-      );
+    try {
+      for (var party in parties) {
+        localStorage.insertData(
+          "parties",
+          party.toJson(),
+        );
+      }
+    } catch (e) {
+      throw Exception('Error adding parties: $e');
     }
   }
 }
