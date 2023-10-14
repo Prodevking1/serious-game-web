@@ -1,14 +1,14 @@
+import 'package:flame_game/presentation/controllers/evolution_controller.dart';
 import 'package:flame_game/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
+
+import '../../domain/entities/player.dart';
 
 class LeaderboardPage extends StatelessWidget {
-  final List<Player> players = [
-    Player(name: 'John Doe', score: 150, level: 5),
-    Player(name: 'Alice Smith', score: 120, level: 4),
-    Player(name: 'Bob Johnson', score: 100, level: 3),
-  ];
-
   LeaderboardPage({super.key});
+  EvolutionController evolutionController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +29,36 @@ class LeaderboardPage extends StatelessWidget {
   }
 
   Widget _buildLeaderboardTitle() {
-    return const Text(
+    return Text(
       'Classement',
-      style: AppTextStyles.subtitle,
+      style: AppTextStyles.subtitle.copyWith(
+        color: Colors.white,
+      ),
+      textAlign: TextAlign.center,
     );
   }
 
   Widget _buildLeaderboardList() {
     return Expanded(
-      child: ListView.builder(
-        itemCount: players.length,
-        itemBuilder: (context, index) {
-          final player = players[index];
-          return _buildLeaderboardItem(player, index + 1);
-        },
-      ),
-    );
+        child: GetBuilder<EvolutionController>(
+            didUpdateWidget: (oldWidget, state) =>
+                evolutionController.getRanking(),
+            builder: (_) {
+              return Obx(() {
+                final players = evolutionController.players;
+                return players.isEmpty
+                    ? const CircularProgressIndicator(
+                        color: Colors.yellow,
+                      )
+                    : ListView.builder(
+                        itemCount: players.length,
+                        itemBuilder: (context, index) {
+                          final player = players[index];
+                          return _buildLeaderboardItem(player, index + 1);
+                        },
+                      );
+              });
+            }));
   }
 
   Widget _buildLeaderboardItem(Player player, int rank) {
@@ -65,31 +79,24 @@ class LeaderboardPage extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            '$rank. ${player.name}',
+            '${rank == 1 ? '🏆 $rank' : rank}. ${player.userName}',
             style: const TextStyle(
-              fontSize: 16.0,
+              fontSize: 18.0,
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
-            'Score: ${player.score} - Level: ${player.level}',
+            '${player.totalScore} pts',
             style: const TextStyle(
-              fontSize: 14.0,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],
       ),
     );
   }
-}
-
-class Player {
-  final String name;
-  final int score;
-  final int level;
-
-  Player({required this.name, required this.score, required this.level});
 }

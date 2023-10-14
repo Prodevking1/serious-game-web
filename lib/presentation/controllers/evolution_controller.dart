@@ -23,8 +23,11 @@ class EvolutionController extends GetxController {
 
   Player? _player;
 
+  RxList<Player> players = <Player>[].obs;
+
   @override
   void onInit() async {
+    await getRanking();
     await fetchSavedStats();
     _player = await authController.getCurrentPlayer();
     // await localStorage.deleteAllData("stats");
@@ -79,5 +82,18 @@ class EvolutionController extends GetxController {
     _totalScore.value = 0;
     _level.value = 0;
     await updateStats();
+  }
+
+  Future getRanking() async {
+    final res = await supabaseClient
+        .from("players")
+        .select("id, name, gender, player_stats(total_score)");
+    if (res != null) {
+      players.clear();
+      res.forEach((element) {
+        players.add(Player.fromJson(element));
+      });
+      return res;
+    }
   }
 }

@@ -137,6 +137,22 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
+          /* Stack(
+            children: [
+              Positioned(
+                top: 130,
+                left: 10,
+                child: RegionPreviewWidget(
+                  region: regionController.regions.first,
+                  onTap: () {
+                    gameAudioPlayer.stopAudio();
+                    Get.toNamed(regionController.regions.first.route!,
+                        arguments: regionController.regions.first);
+                  },
+                ),
+              ),
+            ],
+          ), */
         ),
       ],
     );
