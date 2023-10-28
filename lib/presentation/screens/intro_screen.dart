@@ -55,7 +55,7 @@ class _IntroScreenState extends State<IntroScreen> {
                   height: Get.height * 0.3,
                   padding: const EdgeInsets.all(10),
                   child: AppTextStyles.typewriterStyle(
-                    "Salut ! \n Moi c'est Aissa. Commençons l'aventure 😃",
+                    "Salut ! \n Moi c'est Mounira. Commençons l'aventure 😃",
                   ),
                 ),
               ),

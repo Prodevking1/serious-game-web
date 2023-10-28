@@ -27,6 +27,12 @@ class GameAudioPlayer extends GetxController {
     player.play();
   }
 
+  void playCustom(String audioPath) {
+    player.setAsset(audioPath);
+    player.setLoopMode(LoopMode.off);
+    player.play();
+  }
+
   void stopAudio() {
     print('stop audio');
     player.stop();

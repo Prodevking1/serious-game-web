@@ -17,6 +17,7 @@ class Player {
       id: json['id'],
       userName: json['name'],
       totalScore: json['player_stats']['total_score'],
+      gender: json['gender'],
     );
   }
 

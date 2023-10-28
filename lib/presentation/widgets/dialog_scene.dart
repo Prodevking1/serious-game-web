@@ -2,10 +2,12 @@ import 'package:flame_game/presentation/widgets/button_widget.dart';
 import 'package:flame_game/presentation/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../domain/entities/dialog.dart';
 import '../../domain/entities/line.dart';
 import '../../utils/constants.dart';
+import '../../utils/helpers.dart';
 
 class DialogScene extends StatefulWidget {
   final List<Dialogue> dialogue;
@@ -21,6 +23,7 @@ class DialogScene extends StatefulWidget {
 class _DialogSceneState extends State<DialogScene> {
   int _currentLineIndex = 0;
   int _currentDialogueIndex = 0;
+  GameAudioPlayer audioPlayer = GameAudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,8 @@ class _DialogSceneState extends State<DialogScene> {
 
     String currentSpeaker =
         lines[_currentLineIndex % lines.length].speaker.name;
+
+    audioPlayer.playCustom(currentLine.audioPath);
 
     nextLine() async {
       if (_currentDialogueIndex == widget.dialogue.length - 1 &&
@@ -45,6 +50,7 @@ class _DialogSceneState extends State<DialogScene> {
       } else {
         setState(() {
           _currentLineIndex++;
+          audioPlayer.playCustom(currentLine.audioPath);
         });
       }
     }
@@ -126,17 +132,31 @@ class _DialogSceneState extends State<DialogScene> {
                     const SizedBox(
                       height: 2,
                     ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        currentLine.speaker.name,
-                        style: AppTextStyles.title.copyWith(
-                          color: AppColors.primaryColor,
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              currentLine.speaker.name,
+                              style: AppTextStyles.title.copyWith(
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        GestureDetector(
+                          child: Lottie.asset(
+                            AppMedia.animatedSPeaker,
+                            height: 45,
+                            width: 45,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
-                      height: Get.height / 10,
+                      height: Get.height / 15,
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,

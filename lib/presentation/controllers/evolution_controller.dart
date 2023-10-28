@@ -29,15 +29,16 @@ class EvolutionController extends GetxController {
   void onInit() async {
     await getRanking();
     await fetchSavedStats();
-    _player = await authController.getCurrentPlayer();
+    // _player = await authController.getCurrentPlayer();
     // await localStorage.deleteAllData("stats");
     super.onInit();
   }
 
   fetchSavedStats() async {
-    // final stats = await localStorage.getData("stats");
-    // _totalScore.value = stats.first["score"];
-    // _level.value = stats.first["level"];
+    final stats = await localStorage.getData("stats");
+    print(stats);
+    _totalScore.value = stats.first["score"];
+    _level.value = stats.first["level"];
   }
 
   Future incrementScoreAndLevel({required int score}) async {
@@ -47,26 +48,24 @@ class EvolutionController extends GetxController {
   }
 
   Future updateStats() async {
-    if (_player != null) {
-      Stats newStats = Stats(
-          player_id: _player!.id,
-          total_score: _totalScore.value,
-          level: _level.value);
+    final player = await authController.getCurrentPlayer();
+    Stats newStats = Stats(
+        player_id: player['id'],
+        total_score: _totalScore.value,
+        level: _level.value);
 
-      try {
-        await localStorage.updateData(
-          "stats",
-          newStats.toJson(),
-        );
-
-        await supabaseClient.from("player_stats").upsert({
-          "player_id": _player!.id,
-          "total_score": _totalScore.value,
-          "level": _level.value,
-        });
-      } catch (e) {
-        throw Exception(e);
-      }
+    try {
+      await supabaseClient.from("player_stats").upsert({
+        "player_id": player['id'],
+        "total_score": _totalScore.value,
+        "level": _level.value,
+      });
+      await localStorage.updateData(
+        "stats",
+        newStats.toJson(),
+      );
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -93,6 +92,7 @@ class EvolutionController extends GetxController {
       res.forEach((element) {
         players.add(Player.fromJson(element));
       });
+      players.sort((a, b) => b.totalScore.compareTo(a.totalScore));
       return res;
     }
   }

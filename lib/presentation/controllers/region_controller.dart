@@ -175,7 +175,7 @@ class RegionController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    await generateRegions();
+    // await generateRegions();
     await fetchAllRegions();
 
     // await addParties();

@@ -85,6 +85,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
         speaker: mounira,
         text:
             "Je suis prête à entreprendre ce voyage pour en apprendre plus sur notre pays.",
+        audioPath: AppMedia.introSound,
       ),
       Line(
           speaker: teacher,
@@ -277,10 +278,10 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                 shrinkWrap: true,
                 itemCount: 3,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 24 / 6,
+                    childAspectRatio: 24 / 8,
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 20),
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 10),
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
@@ -341,20 +342,42 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                                   ? wrongBgColor
                                   : Colors.grey[200];
                         }
-                        return AnimatedContainer(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: bgColor ?? Colors.grey[200],
-                          ),
-                          duration: const Duration(milliseconds: 500),
-                          child: Center(
-                            child: Text(
-                              possiblesAnswers[index],
-                              style: AppTextStyles.body.copyWith(fontSize: 14),
-                              textAlign: TextAlign.center,
+                        return Column(
+                          children: [
+                            Expanded(
+                              flex: 5,
+                              child: AnimatedContainer(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: bgColor ?? Colors.grey[200],
+                                ),
+                                duration: const Duration(milliseconds: 500),
+                                child: Center(
+                                  child: Expanded(
+                                    child: Text(
+                                      possiblesAnswers[index],
+                                      style: AppTextStyles.body
+                                          .copyWith(fontSize: 14),
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                child: Lottie.asset(
+                                  AppMedia.animatedSPeaker,
+                                  height: 36,
+                                  width: 36,
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       },
                     ),

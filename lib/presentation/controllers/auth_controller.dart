@@ -33,6 +33,12 @@ class AuthController extends GetxController {
         await localStorage.insertData('players',
             Player(id: res.user!.id, userName: email.split('@')[0]).toJson());
       }
+      await localStorage.insertData('stats', {
+        'player_id': 1,
+        'score': 0,
+        'level': 0,
+      });
+      localStorage.setUserLoggedIn(true);
       isRegisterLoading.value = false;
 
       Get.snackbar(
@@ -41,10 +47,11 @@ class AuthController extends GetxController {
         colorText: Colors.white,
         backgroundColor: AppColors.secondaryColor.withOpacity(0.6),
       );
+
       localStorage.setUserLoggedIn(true);
 
       Get.toNamed(AppRoutes.homePage);
-
+      isLoginLoading.value = false;
       return true;
     } on AuthException catch (e) {
       // throw Exception(e.message);
@@ -86,9 +93,16 @@ class AuthController extends GetxController {
         if (existingUser != null) {
           await localStorage.updateData(
             "players",
-            Player(id: response.user!.id, userName: email.split('@')[0])
-                .toJson(),
+            Player(
+              id: response.user!.id,
+              userName: email.split('@')[0],
+            ).toJson(),
           );
+          await localStorage.insertData('stats', {
+            'player_id': 1,
+            'score': 0,
+            'level': 0,
+          });
           localStorage.setUserLoggedIn(true);
         }
       }
@@ -134,7 +148,8 @@ class AuthController extends GetxController {
       try {
         await localStorage.insertData(
           "players",
-          Player(id: "1", userName: 'Guest').toJson(),
+          Player(id: "1", userName: 'Guest', gender: 'F', totalScore: 0)
+              .toJson(),
         );
         await localStorage.insertData('stats', {
           'player_id': 1,
@@ -151,10 +166,12 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<Player> getCurrentPlayer() async {
-    final res = await localStorage.getData('players');
-    print(res);
-    final currentPlayer = Player.fromJson(res.first);
-    return currentPlayer;
+  Future getCurrentPlayer() async {
+    try {
+      final res = await localStorage.getData('players');
+      return res.first;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

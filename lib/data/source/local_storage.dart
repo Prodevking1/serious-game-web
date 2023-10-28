@@ -44,14 +44,15 @@ class LocalDatabase {
       );
     ''');
     await db.execute('''
-      CREATE TABLE stats (
-        id INTEGER PRIMARY KEY,
-        player_id TEXT ,
-        score INTEGER,
-        level INTEGER,
-        FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
-      );
-    ''');
+  CREATE TABLE stats (
+    id INTEGER PRIMARY KEY,
+    player_id TEXT DEFAULT '1',
+    score INTEGER DEFAULT 0,
+    level INTEGER DEFAULT 0,
+    FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
+  );
+''');
+
     await db.execute('''
       CREATE TABLE regions (
         id INTEGER PRIMARY KEY,
@@ -90,7 +91,7 @@ class LocalStorage {
     return await dbClient.rawQuery(query);
   }
 
-  Future<void> updateData(String table, Map<String, dynamic> data) async {
+  Future updateData(String table, Map<String, dynamic> data) async {
     try {
       final dbClient = await db.database;
       await dbClient.update(

@@ -42,6 +42,7 @@ class AppMedia {
   static const String chief = 'assets/images/chief.png';
 
   static const String animtedBackground = 'assets/animations/background.json';
+  static const String animatedSPeaker = 'assets/animations/speaker.json';
 }
 
 class AppColors {

@@ -130,8 +130,8 @@ class RegisterScreen extends StatelessWidget {
                                   : Expanded(
                                       child: CustomGameButton(
                                         text: "Inscription",
-                                        onPressed: () {
-                                          singUp();
+                                        onPressed: () async {
+                                          await singUp();
                                         },
                                       ),
                                     )),
@@ -176,14 +176,14 @@ class RegisterScreen extends StatelessWidget {
     );
   }
 
-  void singUp() async {
+  Future singUp() async {
     await authController.signUp(
         email: userNameController.text,
         password: passwordController.text,
         gender: genderValue.value);
   }
 
-  void login() async {
+  Future login() async {
     await authController.signIn(
         email: userNameController.text, password: passwordController.text);
   }

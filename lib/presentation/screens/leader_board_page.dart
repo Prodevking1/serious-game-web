@@ -95,6 +95,13 @@ class LeaderboardPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          Text(
+            player.gender == 'F' ? '👧' : '👦🏾',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );
