@@ -66,7 +66,7 @@ class Level1Screen extends StatelessWidget {
           text:
               "Dans mon village, seuls les garçons vont à l'école. Mes parents disent que ce n'est pas la peine de scolariser une fille."),
       Line(
-          audioPath: AppMedia.introSound,
+          audioPath: "assets/sounds/3.ogg",
           speaker: mounira,
           text:
               "Mais c'est si important que les filles soient instruites ! L'égalité des sexes passe par l'éducation. J'aimerais convaincre tes parents."),
@@ -80,7 +80,7 @@ class Level1Screen extends StatelessWidget {
           text:
               "Moi j'ai dû arrêter l'école l'année dernière pour aider aux tâches ménagères et m'occuper de mes frères et sœurs."),
       Line(
-          audioPath: AppMedia.introSound,
+          audioPath: "assets/sounds/4.ogg",
           speaker: mounira,
           text:
               "Farida, tu mérites de poursuivre tes études et de décider de ton avenir ! Je vais me battre pour que tu aies cette chance."),
@@ -94,7 +94,7 @@ class Level1Screen extends StatelessWidget {
           text:
               "Je veux être pilote d'avion pour voyager partout dans le monde. Mais on dit que c'est un métier d'homme."),
       Line(
-          audioPath: AppMedia.introSound,
+          audioPath: "assets/sounds/5.ogg",
           speaker: mounira,
           text:
               "Les filles peuvent faire ce qu'elles veulent comme les garçons. Je vais te montrer que tu peux réaliser ton rêve."),
@@ -108,7 +108,7 @@ class Level1Screen extends StatelessWidget {
           text:
               "Le chemin vers le changement est long. Mais tu as la volonté d'agir pour l'égalité et l'éducation de tous."),
       Line(
-          audioPath: AppMedia.introSound,
+          audioPath: "assets/sounds/6.ogg",
           speaker: mounira,
           text:
               "Oui, ce voyage sera l'occasion d'en apprendre plus et de sensibiliser sur ces enjeux. Le changement viendra !"),
