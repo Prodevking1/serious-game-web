@@ -1,6 +1,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.yourapp">
 
+     <!-- Fonctionnalités matérielles -->
+        <uses-feature android:name="android.hardware.camera" />
+
+        <!-- Internet -->
+        <uses-permission android:name="android.permission.INTERNET" />
+
+        <!-- Accès au réseau étaté -->
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+        <!-- Lecture de l'état du téléphone -->
+        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+        <!-- Accès à la localisation -->
+        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+        <!-- Stockage externe -->
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:label="Serious game"
         android:name="${applicationName}"
@@ -33,26 +53,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        
-        <!-- Fonctionnalités matérielles -->
-        <uses-feature android:name="android.hardware.camera" />
-
-        <!-- Internet -->
-        <uses-permission android:name="android.permission.INTERNET" />
-
-        <!-- Accès au réseau étaté -->
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-        <!-- Lecture de l'état du téléphone -->
-        <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-        <!-- Accès à la localisation -->
-        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-        <!-- Stockage externe -->
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     </application>
 </manifest>
