@@ -46,10 +46,7 @@ class MyGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapUp(TapUpInfo info) {
-    print(
-        'onTap location: (${info.eventPosition.game.x}, ${info.eventPosition.game.y})');
-  }
+  void onTapUp(TapUpInfo info) {}
 }
 
 class EntryApp extends StatelessWidget {
