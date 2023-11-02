@@ -93,6 +93,7 @@ class EvolutionController extends GetxController {
         players.add(Player.fromJson(element));
       });
       players.sort((a, b) => b.totalScore.compareTo(a.totalScore));
+      print(players);
       return res;
     }
   }
