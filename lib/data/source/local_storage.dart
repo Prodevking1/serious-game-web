@@ -181,8 +181,6 @@ class LocalDatabase {
   }
 
   Future<Database> initDatabase() async {
-    if (Platform.isIOS || Platform.isAndroid) {}
-
     final databasesPath = await getDatabasesPath();
     final path = join(databasesPath, 'database.db');
     // deleteDatabase(path);
