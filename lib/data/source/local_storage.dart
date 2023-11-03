@@ -153,11 +153,11 @@ class LocalDatabase {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    if (Platform.isIOS || Platform.isAndroid) {
-      _database = await _initSqfliteDatabase();
-    } else if (kIsWeb) {
+    if (kIsWeb) {
       // Use common_ffi for other platforms (web)
       _database = await _initFfiDatabase();
+    } else {
+      _database = await _initSqfliteDatabase();
     }
 
     return _database!;
