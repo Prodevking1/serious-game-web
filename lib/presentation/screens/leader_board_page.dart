@@ -41,8 +41,8 @@ class LeaderboardPage extends StatelessWidget {
   Widget _buildLeaderboardList() {
     return Expanded(
         child: GetBuilder<EvolutionController>(
-            didUpdateWidget: (oldWidget, state) =>
-                evolutionController.getRanking(),
+            didUpdateWidget: (oldWidget, state) async =>
+                await evolutionController.getRanking(),
             builder: (_) {
               return Obx(() {
                 final players = evolutionController.players;

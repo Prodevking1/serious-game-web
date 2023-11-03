@@ -27,10 +27,10 @@ class EvolutionController extends GetxController {
 
   @override
   void onInit() async {
-    await getRanking();
     await fetchSavedStats();
     // _player = await authController.getCurrentPlayer();
     // await localStorage.deleteAllData("stats");
+    await getRanking();
     super.onInit();
   }
 
@@ -54,19 +54,16 @@ class EvolutionController extends GetxController {
         total_score: _totalScore.value,
         level: _level.value);
 
-    try {
-      await supabaseClient.from("player_stats").upsert({
-        "player_id": player['id'],
-        "total_score": _totalScore.value,
-        "level": _level.value,
-      });
-      await localStorage.updateData(
-        "stats",
-        newStats.toJson(),
-      );
-    } catch (e) {
-      throw Exception(e);
-    }
+    await localStorage.updateData(
+      "stats",
+      newStats.toJson(),
+    );
+
+    await supabaseClient.from("player_stats").upsert({
+      "player_id": player['id'],
+      "total_score": _totalScore.value,
+      "level": _level.value,
+    });
   }
 
   void punishPlayer() {
@@ -93,7 +90,6 @@ class EvolutionController extends GetxController {
         players.add(Player.fromJson(element));
       });
       players.sort((a, b) => b.totalScore.compareTo(a.totalScore));
-      print(players);
       return res;
     }
   }

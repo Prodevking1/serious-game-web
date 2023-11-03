@@ -23,6 +23,7 @@ class Level1Screen extends StatelessWidget {
   EvolutionController evolutionController = Get.find();
   PartyController partyController = Get.find();
   final Region? region = Get.arguments;
+  Tts tts = Get.put(Tts());
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +124,8 @@ class Level1Screen extends StatelessWidget {
           dialogueWithChief
         ],
         onDialogueEnd: () async {
+          tts.flutterTts.stop();
+
           await partyController.updatePartyStatus(region!.party!, Status.won);
 
           Get.dialog(
@@ -145,9 +148,9 @@ class Level1Screen extends StatelessWidget {
                 CustomGameButton(
                   text: 'Continuer',
                   onPressed: () async {
+                    Get.offAllNamed(AppRoutes.homePage);
                     await evolutionController.incrementScoreAndLevel(
                         score: PartyReward.basicRewardPoints);
-                    Get.offAllNamed(AppRoutes.homePage);
                   },
                 )
               ],

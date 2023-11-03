@@ -24,6 +24,7 @@ class _DialogSceneState extends State<DialogScene> {
   int _currentLineIndex = 0;
   int _currentDialogueIndex = 0;
   GameAudioPlayer audioPlayer = GameAudioPlayer();
+  Tts tts = Get.find<Tts>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _DialogSceneState extends State<DialogScene> {
     String currentSpeaker =
         lines[_currentLineIndex % lines.length].speaker.name;
 
-    audioPlayer.playCustom(currentLine.audioPath);
+    tts.speakText(currentLine);
 
     nextLine() async {
       if (_currentDialogueIndex == widget.dialogue.length - 1 &&
@@ -50,7 +51,7 @@ class _DialogSceneState extends State<DialogScene> {
       } else {
         setState(() {
           _currentLineIndex++;
-          audioPlayer.playCustom(currentLine.audioPath);
+          tts.speakText(currentLine);
         });
       }
     }

@@ -13,17 +13,36 @@ import '../../utils/constants.dart';
 import '../../utils/helpers.dart';
 import '../controllers/evolution_controller.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final EvolutionController evolutionController = Get.find();
+
   final RegionController regionController = Get.find();
+
   final Set<Offset> usedOffsets = {};
+
   final GameAudioPlayer gameAudioPlayer = Get.find();
 
   @override
+  void initState() {
+    super.initState();
+    gameAudioPlayer.playBackgroundMusic();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    gameAudioPlayer.stopAudio();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // gameAudioPlayer.playBackgroundMusic();
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder<void>(

@@ -83,10 +83,10 @@ class AuthController extends GetxController {
       final response =
           await authService.signInWithEmailAndPassword(email, password);
       if (response.user != null) {
-        // await localStorage.insertData(
-        //     'players',
-        //     Player(id: response.user!.id, userName: email.split('@')[0])
-        //         .toJson());
+        await localStorage.insertData(
+            'players',
+            Player(id: response.user!.id, userName: email.split('@')[0])
+                .toJson());
 
         final existingUser = await localStorage.rawQuery(
             "SELECT * FROM players WHERE id = '${response.user!.id}'");
@@ -169,6 +169,7 @@ class AuthController extends GetxController {
   Future getCurrentPlayer() async {
     try {
       final res = await localStorage.getData('players');
+      print(res);
       return res.first;
     } catch (e) {
       rethrow;
