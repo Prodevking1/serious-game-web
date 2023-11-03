@@ -137,10 +137,12 @@ class LocalStorage {
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import '../../domain/entities/game_state.dart';
 import '../../domain/entities/region.dart';
@@ -153,7 +155,7 @@ class LocalDatabase {
 
     if (Platform.isIOS || Platform.isAndroid) {
       _database = await _initSqfliteDatabase();
-    } else {
+    } else if (kIsWeb) {
       // Use common_ffi for other platforms (web)
       _database = await _initFfiDatabase();
     }
@@ -170,7 +172,7 @@ class LocalDatabase {
   Future<Database> _initFfiDatabase() async {
     sqfliteFfiInit();
 
-    var databaseFactory = databaseFactoryFfi;
+    var databaseFactory = databaseFactoryFfiWeb;
     var databasePath = await databaseFactory.getDatabasesPath();
     String path = join(databasePath, 'database.db');
     return await databaseFactory.openDatabase(
