@@ -19,6 +19,8 @@ import '../routes/app_routes.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/card_widget.dart';
 
+Completer<void> _lottieCompleter = Completer<void>();
+
 class Level2Screen extends StatefulWidget {
   const Level2Screen({Key? key}) : super(key: key);
 
@@ -77,7 +79,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final Person mounira = Person(name: 'Mounira', imagePath: AppMedia.mounira);
     final Person teacher =
-        Person(name: 'Enseignante', imagePath: AppMedia.teacher);
+        Person(name: 'Maman de', imagePath: AppMedia.olderWoman);
 
     Dialogue dialogueWithTeacher =
         Dialogue(description: 'Le grand depart.', lines: [
@@ -128,92 +130,173 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
     }
 
     return Scaffold(
-      // backgroundColor: AppColors.primaryColor,
-      body: SafeArea(
-        child: Stack(
-          //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-          children: [
-            Lottie.asset(
-              AppMedia.animtedBackground,
-              options: LottieOptions(enableMergePaths: true),
-              height: Get.height,
-              width: Get.width,
-              fit: BoxFit.fill,
-            ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Opacity(
-                opacity: 0.8,
-                child: Container(
-                  height: Get.height / 1,
-                  width: Get.width / 4,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(30),
-                        bottomRight: Radius.circular(30)),
-                    color: Colors.white,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(currentDialogue.lines
-                          .where((element) => element.speaker.name == 'Mounira')
-                          .first
-                          .speaker
-                          .imagePath),
-                    ),
+      backgroundColor: AppColors.primaryColor,
+      body: Stack(
+        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Lottie.asset(
+          //   AppMedia.animtedBackground,
+          //   options: LottieOptions(enableMergePaths: true),
+          //   height: Get.height,
+          //   width: Get.width,
+          //   fit: BoxFit.fill,
+          // ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Opacity(
+              opacity: 0.8,
+              child: Container(
+                height: Get.height / 1,
+                width: Get.width / 4,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(30),
+                      bottomRight: Radius.circular(30)),
+                  color: Colors.white,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(currentDialogue.lines
+                        .where((element) => element.speaker.name == 'Mounira')
+                        .first
+                        .speaker
+                        .imagePath),
                   ),
                 ),
               ),
             ),
-            Positioned(
-              top: Get.height * 0.07,
-              left: Get.width * 0.3,
-              child: Obx(
-                () => AnimatedFlipCounter(
-                  suffix: " 🏆",
-                  duration: const Duration(milliseconds: 500),
-                  value: EvolutionController.totalScore.toDouble(),
-                  textStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                    color: Colors.white,
-                  ),
+          ),
+          Positioned(
+            top: Get.height * 0.07,
+            left: Get.width * 0.3,
+            child: Obx(
+              () => AnimatedFlipCounter(
+                suffix: " 🏆",
+                duration: const Duration(milliseconds: 500),
+                value: EvolutionController.totalScore.toDouble(),
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  color: Colors.white,
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: CircularCountDownTimer(
-                  duration: answerDuration,
-                  initialDuration: 0,
-                  controller: _countDownController,
-                  width: MediaQuery.of(context).size.width / 5,
-                  height: MediaQuery.of(context).size.height / 5,
-                  ringColor: Colors.grey[300]!,
-                  fillColor: Colors.red,
-                  fillGradient: null,
-                  backgroundColor: Colors.white,
-                  strokeWidth: 2.0,
-                  strokeCap: StrokeCap.round,
-                  textFormat: CountdownTextFormat.SS,
-                  isReverse: true,
-                  isReverseAnimation: true,
-                  isTimerTextShown: true,
-                  autoStart: false,
-                  onStart: () {},
-                  onComplete: () async {
-                    gameAudioPlayer.playClickSound();
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: CircularCountDownTimer(
+                duration: answerDuration,
+                initialDuration: 0,
+                controller: _countDownController,
+                width: MediaQuery.of(context).size.width / 5,
+                height: MediaQuery.of(context).size.height / 5,
+                ringColor: Colors.grey[300]!,
+                fillColor: Colors.red,
+                fillGradient: null,
+                backgroundColor: Colors.white,
+                strokeWidth: 2.0,
+                strokeCap: StrokeCap.round,
+                textFormat: CountdownTextFormat.SS,
+                isReverse: true,
+                isReverseAnimation: true,
+                isTimerTextShown: true,
+                autoStart: false,
+                onStart: () {},
+                onComplete: () async {
+                  gameAudioPlayer.playClickSound();
 
+                  partyController
+                      .answerToQuestion(
+                    possiblesAnswers[currentPossibleAnswersIndex],
+                  )
+                      .then((value) {
+                    if (value) {
+                      rewardCorrectAnswer();
+                      setState(() {
+                        isAnimating = true;
+                      });
+
+                      Timer(const Duration(milliseconds: 500), () {
+                        setState(() {
+                          isAnimating = false;
+                          isCorrectAnswer = false;
+                        });
+                      });
+                    } else {
+                      punishWrongAnswer();
+
+                      setState(() {
+                        isAnimating = true;
+                      });
+
+                      Timer(const Duration(milliseconds: 500), () {
+                        setState(() {
+                          isAnimating = false;
+                        });
+                        nextQuestions();
+                        _countDownController.restart();
+                      });
+                    }
+                  });
+                },
+                onChange: (String timeStamp) {},
+                timeFormatterFunction: (defaultFormatterFunction, duration) {
+                  return Function.apply(defaultFormatterFunction, [duration]);
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: Get.height / 1.85,
+                right: Get.height / 1.85,
+                top: Get.height / 3),
+            child: CustomCard(
+              backgroundColor: Colors.white,
+              height: 45,
+              borderRadius: 15,
+              child: Center(
+                child: Text(
+                  currentQuestionTitle!,
+                  style: AppTextStyles.subtitle.copyWith(
+                    color: Colors.black,
+                    fontSize: 17,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: Get.height / 1.85,
+                right: Get.height / 1.85,
+                top: Get.height / 1.8),
+            child: GridView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 3,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 24 / 8,
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 10),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    if (currentPossibleAnswersIndex ==
+                        allQuestions.length - 1) {
+                      _buildFinishPartyWidget();
+                    }
+                    _countDownController.restart();
                     partyController
-                        .answerToQuestion(
-                      possiblesAnswers[currentPossibleAnswersIndex],
-                    )
+                        .answerToQuestion(possiblesAnswers[index])
                         .then((value) {
                       if (value) {
                         rewardCorrectAnswer();
                         setState(() {
+                          currentIndex = index;
                           isAnimating = true;
                         });
 
@@ -222,10 +305,11 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                             isAnimating = false;
                             isCorrectAnswer = false;
                           });
+                          nextQuestions();
                         });
                       } else {
                         punishWrongAnswer();
-
+                        currentIndex = index;
                         setState(() {
                           isAnimating = true;
                         });
@@ -234,183 +318,98 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                           setState(() {
                             isAnimating = false;
                           });
-                          nextQuestions();
-                          _countDownController.restart();
+                          if (currentPossibleAnswersIndex ==
+                              allQuestions.length - 1) {
+                            _buildFinishPartyWidget();
+                          } else {
+                            nextQuestions();
+                          }
                         });
                       }
                     });
                   },
-                  onChange: (String timeStamp) {},
-                  timeFormatterFunction: (defaultFormatterFunction, duration) {
-                    return Function.apply(defaultFormatterFunction, [duration]);
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: Get.height / 1.85,
-                  right: Get.height / 1.85,
-                  top: Get.height / 3),
-              child: CustomCard(
-                backgroundColor: Colors.white,
-                height: 45,
-                borderRadius: 15,
-                child: Center(
-                  child: Text(
-                    currentQuestionTitle!,
-                    style: AppTextStyles.subtitle.copyWith(
-                      color: Colors.black,
-                      fontSize: 17,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: Get.height / 1.85,
-                  right: Get.height / 1.85,
-                  top: Get.height / 1.8),
-              child: GridView.builder(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 3,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 24 / 8,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 10),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (currentPossibleAnswersIndex ==
-                          allQuestions.length - 1) {
-                        _buildFinishPartyWidget();
+                  child: AnimatedBuilder(
+                    animation: _animationController,
+                    builder: (context, child) {
+                      Color? succesBgColor = Colors.green;
+                      Color? wrongBgColor = Colors.red[500];
+                      Color? bgColor;
+
+                      if (isAnimating) {
+                        bgColor = (correctAnswerIndex == index)
+                            ? succesBgColor
+                            : currentIndex == index
+                                ? wrongBgColor
+                                : Colors.grey[200];
                       }
-                      _countDownController.restart();
-                      partyController
-                          .answerToQuestion(possiblesAnswers[index])
-                          .then((value) {
-                        if (value) {
-                          rewardCorrectAnswer();
-                          setState(() {
-                            currentIndex = index;
-                            isAnimating = true;
-                          });
-
-                          Timer(const Duration(milliseconds: 500), () {
-                            setState(() {
-                              isAnimating = false;
-                              isCorrectAnswer = false;
-                            });
-                            nextQuestions();
-                          });
-                        } else {
-                          punishWrongAnswer();
-                          currentIndex = index;
-                          setState(() {
-                            isAnimating = true;
-                          });
-
-                          Timer(const Duration(milliseconds: 500), () {
-                            setState(() {
-                              isAnimating = false;
-                            });
-                            if (currentPossibleAnswersIndex ==
-                                allQuestions.length - 1) {
-                              _buildFinishPartyWidget();
-                            } else {
-                              nextQuestions();
-                            }
-                          });
-                        }
-                      });
-                    },
-                    child: AnimatedBuilder(
-                      animation: _animationController,
-                      builder: (context, child) {
-                        Color? succesBgColor = Colors.green;
-                        Color? wrongBgColor = Colors.red[500];
-                        Color? bgColor;
-
-                        if (isAnimating) {
-                          bgColor = (correctAnswerIndex == index)
-                              ? succesBgColor
-                              : currentIndex == index
-                                  ? wrongBgColor
-                                  : Colors.grey[200];
-                        }
-                        return Column(
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: AnimatedContainer(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: bgColor ?? Colors.grey[200],
-                                ),
-                                duration: const Duration(milliseconds: 500),
-                                child: Center(
-                                  child: Expanded(
-                                    child: Text(
-                                      possiblesAnswers[index],
-                                      style: AppTextStyles.body
-                                          .copyWith(fontSize: 14),
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                    ),
+                      return Column(
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: AnimatedContainer(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: bgColor ?? Colors.grey[200],
+                              ),
+                              duration: const Duration(milliseconds: 500),
+                              child: Center(
+                                child: Expanded(
+                                  child: Text(
+                                    possiblesAnswers[index],
+                                    style: AppTextStyles.body
+                                        .copyWith(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
                                   ),
                                 ),
                               ),
                             ),
-                            Expanded(
-                              flex: 2,
-                              child: GestureDetector(
-                                child: Lottie.asset(
-                                  AppMedia.animatedSPeaker,
-                                  height: 36,
-                                  width: 36,
-                                ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: GestureDetector(
+                              child: Lottie.asset(
+                                AppMedia.animatedSPeaker,
+                                height: 36,
+                                width: 36,
                               ),
                             ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              },
             ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Opacity(
-                opacity: 0.8,
-                child: Container(
-                  height: Get.height / 1,
-                  width: Get.width / 4,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        bottomLeft: Radius.circular(30)),
-                    color: Colors.white,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage(currentDialogue.lines
-                          .where((element) => element.speaker.name != 'Mounira')
-                          .first
-                          .speaker
-                          .imagePath),
-                    ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Opacity(
+              opacity: 0.8,
+              child: Container(
+                height: Get.height / 1,
+                width: Get.width / 4,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      bottomLeft: Radius.circular(30)),
+                  color: Colors.white,
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(currentDialogue.lines
+                        .where((element) => element.speaker.name != 'Mounira')
+                        .first
+                        .speaker
+                        .imagePath),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

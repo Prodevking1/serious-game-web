@@ -62,7 +62,7 @@ class AppRoutes {
       ),
       GetPage(
         name: homePage,
-        page: () => HomeScreen(),
+        page: () => const HomeScreen(),
         binding: BaseBinding(),
       ),
       GetPage(
@@ -79,15 +79,6 @@ class AppRoutes {
   }
 
   initialRoute() async {
-    LocalStorage localStorage = LocalStorage();
-    // await localStorage.setUserLoggedIn(false);
-
-    var isLoggedIn = await localStorage.isUserLoggedIn();
-    if (isLoggedIn) {
-      initialPage = homePage;
-    } else {
-      initialPage = introPage;
-    }
-    // return player != null ? homePage : introPage;
+    return introPage;
   }
 }

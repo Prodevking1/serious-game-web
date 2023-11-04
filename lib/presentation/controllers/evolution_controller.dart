@@ -50,11 +50,11 @@ class EvolutionController extends GetxController {
 
     await authController.saveStatsData(newStats.toJson());
 
-    await supabaseClient.from("player_stats").upsert({
-      "player_id": player['id'],
-      "total_score": _totalScore.value,
-      "level": _level.value,
-    });
+    // await supabaseClient.from("player_stats").upsert({
+    //   "player_id": player['id'],
+    //   "total_score": _totalScore.value,
+    //   "level": _level.value,
+    // });
   }
 
   void punishPlayer() {

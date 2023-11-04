@@ -15,15 +15,16 @@ class AuthController extends GetxController {
 
   SupabaseClient supabaseClient = Get.find();
 
-  Future<bool> signUp({
+  Future signUp({
     required String email,
     required String password,
     required String gender,
   }) async {
-    isRegisterLoading.value = true;
-
     try {
+      isRegisterLoading.value = true;
       final res = await authService.signUpWithEmailAndPassword(email, password);
+      isLoginLoading.value = false;
+
       if (res.user != null) {
         await supabaseClient.from('players').insert({
           'id': res.user!.id,
@@ -31,8 +32,6 @@ class AuthController extends GetxController {
           'gender': gender,
         });
       }
-
-      isRegisterLoading.value = false;
 
       Get.snackbar(
         'Félicitations',
@@ -42,8 +41,6 @@ class AuthController extends GetxController {
       );
 
       Get.toNamed(AppRoutes.homePage);
-      isLoginLoading.value = false;
-      return true;
     } on AuthException catch (e) {
       if (e.statusCode == "400") {
         Get.snackbar(
@@ -62,16 +59,16 @@ class AuthController extends GetxController {
       );
       throw Exception(e);
     }
-
-    return false;
   }
 
   Future signIn({required String email, required String password}) async {
-    isLoginLoading.value = true;
-
     try {
+      isLoginLoading.value = true;
+
       final response =
           await authService.signInWithEmailAndPassword(email, password);
+      isLoginLoading.value = false;
+
       if (response.user != null) {
         await savePlayerData(Player(
           id: response.user!.id,
@@ -84,8 +81,6 @@ class AuthController extends GetxController {
         });
         saveUserLoggedIn(true);
       }
-
-      isLoginLoading.value = false;
 
       Get.snackbar(
         'Félicitations',

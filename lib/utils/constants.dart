@@ -40,6 +40,7 @@ class AppMedia {
   static const String safi = 'assets/images/safi.png';
   static const String djamila = 'assets/images/safi.png';
   static const String chief = 'assets/images/chief.png';
+  static const String olderWoman = 'assets/images/older.png';
 
   static const String animtedBackground = 'assets/animations/background.json';
   static const String animatedSPeaker = 'assets/animations/speaker.json';

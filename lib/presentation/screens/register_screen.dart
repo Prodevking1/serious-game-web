@@ -123,32 +123,25 @@ class RegisterScreen extends StatelessWidget {
                                   },
                                 ),
                               ), */
-                              Obx(() => authController.isRegisterLoading.value
-                                  ? const CircularProgressIndicator(
-                                      color: AppColors.primaryColor,
-                                    )
-                                  : Expanded(
-                                      child: CustomGameButton(
-                                        text: "Inscription",
-                                        onPressed: () async {
-                                          await singUp();
-                                        },
-                                      ),
-                                    )),
+                              Expanded(
+                                child: CustomGameButton(
+                                  text: "Inscription",
+                                  onPressed: () async {
+                                    if (userNameController.text.isNotEmpty &&
+                                        passwordController.text.isNotEmpty) {
+                                      await singUp();
+                                    }
+                                  },
+                                ),
+                              ),
                               const SizedBox(width: 5),
-                              Obx(
-                                () => authController.isLoginLoading.value
-                                    ? const CircularProgressIndicator(
-                                        color: AppColors.primaryColor,
-                                      )
-                                    : Expanded(
-                                        child: CustomGameButton(
-                                          text: "Connexion",
-                                          onPressed: () {
-                                            login();
-                                          },
-                                        ),
-                                      ),
+                              Expanded(
+                                child: CustomGameButton(
+                                  text: "Connexion",
+                                  onPressed: () {
+                                    login();
+                                  },
+                                ),
                               ),
                             ],
                           )
