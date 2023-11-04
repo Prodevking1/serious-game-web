@@ -167,46 +167,16 @@ import '../../domain/entities/party.dart';
 import '../../domain/entities/region.dart';
 
 class RegionController extends GetxController {
-  LocalStorage localStorage = LocalStorage();
-
   RxList<Region> regions = <Region>[].obs;
 
   @override
   void onInit() async {
     super.onInit();
-    // await generateRegions();
-    // await addParties();
-    await fetchAllRegions();
-    // await localStorage.deleteAllData('regions');
-    // await localStorage.deleteAllData('parties');
-
-    if (regions.isEmpty) {
-      await generateRegions();
-      await fetchAllRegions();
-    }
-
-    // If no parties are fetched, generate and fetch
-    if (regions.isEmpty) {
-      await addParties();
-      await fetchAllRegions();
-    }
-  }
-
-  fetchAllRegions() async {
-    regions.clear();
-    final res = await localStorage.rawQuery(
-      '''
-      SELECT  * FROM regions join parties on regions.party_id = parties.id
-      ''',
-    );
-    final regionsList = res.map((e) => Region.fromJson(e)).toList();
-    for (var element in regionsList) {
-      regions.add(element);
-    }
+    generateRegions();
   }
 
   generateRegions() {
-    List<Region> regions = [
+    List<Region> generatedRegions = [
       Region(
         offset: const Offset(
           130,
@@ -216,6 +186,11 @@ class RegionController extends GetxController {
         name: 'Banfora',
         partyId: 1,
         route: AppRoutes.level1,
+        party: Party(
+          id: 1,
+          name: 'Banfora',
+          description: 'Le grand depart de Mounira pour l\'aventure',
+        ),
       ),
       Region(
         offset: const Offset(
@@ -226,6 +201,11 @@ class RegionController extends GetxController {
         name: 'Ouagadougou',
         partyId: 2,
         route: AppRoutes.level2,
+        party: Party(
+          id: 2,
+          name: 'Ouagadougou',
+          description: 'Premiere mission de Mounira',
+        ),
       ),
       Region(
         offset: const Offset(
@@ -236,6 +216,11 @@ class RegionController extends GetxController {
         name: 'Fada N\'Gourma',
         partyId: 3,
         route: AppRoutes.level2,
+        party: Party(
+          id: 3,
+          name: 'Fada N\'Gourma',
+          description: 'Mounira a la recherche de...',
+        ),
       ),
       Region(
         offset: const Offset(
@@ -246,6 +231,11 @@ class RegionController extends GetxController {
         name: 'Bobo-Dioulasso',
         partyId: 4,
         route: AppRoutes.level2,
+        party: Party(
+          id: 4,
+          name: 'Bobo-Dioulasso',
+          description: 'Mounira a la recherche de...',
+        ),
       ),
       Region(
         offset: const Offset(
@@ -256,73 +246,16 @@ class RegionController extends GetxController {
         name: 'Ouahigouya',
         partyId: 5,
         route: AppRoutes.level2,
-      ),
-      Region(
-        offset: const Offset(
-          180.8,
-          385.0,
+        party: Party(
+          id: 5,
+          name: 'Ouahigouya',
+          description: 'Mounira a la recherche de...',
         ),
-        id: 6,
-        name: 'Gaoua',
-        partyId: 6,
-        route: AppRoutes.level2,
       ),
     ];
 
-    try {
-      for (var region in regions) {
-        localStorage.insertData(
-          "regions",
-          region.toJson(),
-        );
-      }
-    } catch (e) {
-      print(e);
-    }
+    regions.addAll(generatedRegions);
   }
 
-  addParties() {
-    List<Party> parties = [
-      Party(
-        id: 1,
-        name: 'Banfora',
-        description: 'Le grand depart de Mounira pour l\'aventure',
-      ),
-      Party(
-        id: 2,
-        name: 'Ouagadougou',
-        description: 'Premiere mission de Mounira',
-      ),
-      Party(
-        id: 3,
-        name: 'Fada N\'Gourma',
-        description: 'Mounira a la recherche de...',
-      ),
-      Party(
-        id: 4,
-        name: 'Bobo-Dioulasso',
-        description: 'Mounira a la recherche de...',
-      ),
-      Party(
-        id: 5,
-        name: 'Ouahigouya',
-        description: 'Mounira a la recherche de...',
-      ),
-      Party(
-        id: 6,
-        name: 'Gaoua',
-        description: 'Mounira a la recherche de...',
-      ),
-    ];
-    try {
-      for (var party in parties) {
-        localStorage.insertData(
-          "parties",
-          party.toJson(),
-        );
-      }
-    } catch (e) {
-      throw Exception('Error adding parties: $e');
-    }
-  }
+  
 }

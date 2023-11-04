@@ -19,7 +19,9 @@ class RegionPreviewWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         gameAudioPlayer.playClickSound();
-        if (region?.party!.status == Status.notStarted) {
+        if (region != null &&
+            region?.party != null &&
+            region?.party?.status == Status.notStarted) {
           onTap!();
         } else {
           Get.dialog(

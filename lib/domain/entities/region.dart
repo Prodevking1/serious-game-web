@@ -5,7 +5,7 @@ class Region {
   int? id;
   String name;
   String? description;
-  Party? party;
+  Party party;
   Offset? offset;
   int? partyId;
   String? route;
@@ -14,7 +14,7 @@ class Region {
     this.id,
     required this.name,
     this.description,
-    this.party,
+    required this.party,
     this.offset,
     this.partyId,
     this.route,

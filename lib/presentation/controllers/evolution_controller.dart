@@ -3,13 +3,10 @@ import 'package:flame_game/utils/constants.dart';
 import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
 
-import '../../data/source/local_storage.dart';
 import '../../domain/entities/player.dart';
 import '../../domain/entities/stats.dart';
 
 class EvolutionController extends GetxController {
-  LocalStorage localStorage = LocalStorage();
-
   // AuthController authController = Get.find();
   AuthController authController = AuthController();
 
@@ -21,25 +18,21 @@ class EvolutionController extends GetxController {
   static int get totalScore => _totalScore.value;
   static int get level => _level.value;
 
-  Player? _player;
-
   RxList<Player> players = <Player>[].obs;
 
   @override
   void onInit() async {
-    await fetchSavedStats();
-    // _player = await authController.getCurrentPlayer();
-    // await localStorage.deleteAllData("stats");
+    // await fetchSavedStats();
     await getRanking();
     super.onInit();
   }
 
-  fetchSavedStats() async {
-    final stats = await localStorage.getData("stats");
-    print(stats);
-    _totalScore.value = stats.first["score"];
-    _level.value = stats.first["level"];
-  }
+  // fetchSavedStats() async {
+  //   final stats = await authController.getPlayerData();
+  //   print(stats);
+  //   _totalScore.value = stats?.first["score"] ?? 0;
+  //   _level.value = stats?.first["level"] ?? 0;
+  // }
 
   Future incrementScoreAndLevel({required int score}) async {
     _totalScore.value += score;
@@ -50,14 +43,12 @@ class EvolutionController extends GetxController {
   Future updateStats() async {
     final player = await authController.getCurrentPlayer();
     Stats newStats = Stats(
-        player_id: player['id'],
-        total_score: _totalScore.value,
-        level: _level.value);
-
-    await localStorage.updateData(
-      "stats",
-      newStats.toJson(),
+      player_id: player['id'],
+      total_score: _totalScore.value,
+      level: _level.value,
     );
+
+    await authController.saveStatsData(newStats.toJson());
 
     await supabaseClient.from("player_stats").upsert({
       "player_id": player['id'],

@@ -6,11 +6,8 @@ import '../../data/source/local_storage.dart';
 import '../../domain/entities/party.dart';
 
 class PartyController extends GetxController {
-  LocalStorage localStorage = LocalStorage();
-
   Future updatePartyStatus(Party party, Status newStatus) async {
     party.status = newStatus;
-    await localStorage.updateData("parties", party.toJson());
   }
 
   //Part 2

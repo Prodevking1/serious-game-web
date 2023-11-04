@@ -549,7 +549,7 @@ class _Part2State extends State<Level2Screen> with TickerProviderStateMixin {
                 onPressed: () async {
                   await evolutionController.updateStats();
                   await partyController.updatePartyStatus(
-                      region.party!,
+                      region.party,
                       _correctsAnswersNumber >= allQuestions.length
                           ? Status.won
                           : Status.lost);

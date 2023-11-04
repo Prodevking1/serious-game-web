@@ -4,22 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
 
-import '../../data/source/local_storage.dart';
 import '../../domain/entities/player.dart';
 import '../routes/app_routes.dart';
 
 class AuthController extends GetxController {
   AuthService authService = AuthService();
-  static final localStorage = LocalStorage();
   RxBool isRegisterLoading = false.obs;
   RxBool isLoginLoading = false.obs;
   AuthController({authService});
 
   SupabaseClient supabaseClient = Get.find();
-  Future<bool> signUp(
-      {required String email,
-      required String password,
-      required String gender}) async {
+
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String gender,
+  }) async {
     isRegisterLoading.value = true;
 
     try {
@@ -30,15 +30,8 @@ class AuthController extends GetxController {
           'name': email.split('@')[0],
           'gender': gender,
         });
-        await localStorage.insertData('players',
-            Player(id: res.user!.id, userName: email.split('@')[0]).toJson());
       }
-      await localStorage.insertData('stats', {
-        'player_id': 1,
-        'score': 0,
-        'level': 0,
-      });
-      localStorage.setUserLoggedIn(true);
+
       isRegisterLoading.value = false;
 
       Get.snackbar(
@@ -48,13 +41,10 @@ class AuthController extends GetxController {
         backgroundColor: AppColors.secondaryColor.withOpacity(0.6),
       );
 
-      localStorage.setUserLoggedIn(true);
-
       Get.toNamed(AppRoutes.homePage);
       isLoginLoading.value = false;
       return true;
     } on AuthException catch (e) {
-      // throw Exception(e.message);
       if (e.statusCode == "400") {
         Get.snackbar(
           'Erreur',
@@ -83,29 +73,18 @@ class AuthController extends GetxController {
       final response =
           await authService.signInWithEmailAndPassword(email, password);
       if (response.user != null) {
-        await localStorage.insertData(
-            'players',
-            Player(id: response.user!.id, userName: email.split('@')[0])
-                .toJson());
-
-        final existingUser = await localStorage.rawQuery(
-            "SELECT * FROM players WHERE id = '${response.user!.id}'");
-        if (existingUser != null) {
-          await localStorage.updateData(
-            "players",
-            Player(
-              id: response.user!.id,
-              userName: email.split('@')[0],
-            ).toJson(),
-          );
-          await localStorage.insertData('stats', {
-            'player_id': 1,
-            'score': 0,
-            'level': 0,
-          });
-          localStorage.setUserLoggedIn(true);
-        }
+        await savePlayerData(Player(
+          id: response.user!.id,
+          userName: email.split('@')[0],
+        ));
+        await saveStatsData({
+          'player_id': 1,
+          'score': 0,
+          'level': 0,
+        });
+        saveUserLoggedIn(true);
       }
+
       isLoginLoading.value = false;
 
       Get.snackbar(
@@ -142,21 +121,21 @@ class AuthController extends GetxController {
   }
 
   continueAsGuest() async {
-    final existingGuest = await localStorage
-        .rawQuery("SELECT * FROM players WHERE name = 'Guest'");
-    if (existingGuest.isEmpty) {
+    final existingGuest = await getPlayerDataByName('Guest');
+    if (existingGuest == null) {
       try {
-        await localStorage.insertData(
-          "players",
-          Player(id: "1", userName: 'Guest', gender: 'F', totalScore: 0)
-              .toJson(),
-        );
-        await localStorage.insertData('stats', {
+        await savePlayerData(Player(
+          id: "1",
+          userName: 'Guest',
+          gender: 'F',
+          totalScore: 0,
+        ));
+        await saveStatsData({
           'player_id': 1,
           'score': 0,
           'level': 0,
         });
-        await localStorage.setUserLoggedIn(true);
+        saveUserLoggedIn(true);
         Get.toNamed(AppRoutes.homePage);
       } catch (e) {
         print(e);
@@ -168,11 +147,34 @@ class AuthController extends GetxController {
 
   Future getCurrentPlayer() async {
     try {
-      final res = await localStorage.getData('players');
+      final res = await getPlayerData();
       print(res);
-      return res.first;
+      return res?.first;
     } catch (e) {
       rethrow;
     }
+  }
+
+  // Fonctions pour gérer la sauvegarde des données
+  Future<void> savePlayerData(Player player) async {
+    // Implémentez la sauvegarde de Player directement ici
+  }
+
+  Future<void> saveStatsData(Map<String, dynamic> stats) async {
+    // Implémentez la sauvegarde de Stats directement ici
+  }
+
+  Future<void> saveUserLoggedIn(bool value) async {
+    // Implémentez la sauvegarde de l'état de connexion directement ici
+  }
+
+  Future<List<Map<String, dynamic>>?> getPlayerData() async {
+    // Implémentez la récupération de données du joueur directement ici
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>?> getPlayerDataByName(String name) async {
+    // Implémentez la récupération de données du joueur par nom directement ici
+    return null;
   }
 }
